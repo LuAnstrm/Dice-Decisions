@@ -1,0 +1,341 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* ============================================================
+   TAILWIND v4 DESIGN TOKENS (Phase 0.3)
+   ============================================================ */
+@theme inline {
+  /* Surface Colors */
+  --color-surface-base: #0a0a0f;
+  --color-surface-elevated: #12121a;
+  --color-surface-sidebar: #0d0d14;
+  --color-surface-hover: #1a1a2e;
+  --color-surface-input: #16161f;
+  --color-surface-overlay: #08080d;
+
+  /* Border Colors */
+  --color-border-default: #1e1e2e;
+  --color-border-hover: #2e2e4e;
+  --color-border-active: #7c3aed;
+  --color-border-subtle: #151520;
+
+  /* Accent Colors */
+  --color-accent-purple: #7c3aed;
+  --color-accent-cyan: #06b6d4;
+  --color-accent-green: #22c55e;
+  --color-accent-amber: #eab308;
+  --color-accent-red: #ef4444;
+  --color-accent-gold: #ca8a04;
+  --color-accent-sickly: #16a34a;
+
+  /* Text Colors */
+  --color-text-primary: #f1f5f9;
+  --color-text-secondary: #94a3b8;
+  --color-text-muted: #475569;
+  --color-text-faint: #3a3a5c;
+
+  /* Status Colors */
+  --color-status-success: #22c55e;
+  --color-status-warning: #eab308;
+  --color-status-danger: #ef4444;
+  --color-status-info: #06b6d4;
+
+  /* Font Families */
+  --font-sans: var(--font-sans);
+  --font-mono: 'JetBrains Mono', monospace;
+  --font-display: 'Georgia', 'Cambria', 'Times New Roman', serif;
+
+  /* Border Radius */
+  --radius-card: 12px;
+  --radius-badge: 9999px;
+  --radius-button: 8px;
+
+  /* Box Shadows */
+  --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.3);
+  --shadow-card-hover: 0 8px 30px rgba(0, 0, 0, 0.5);
+  --shadow-glow-purple: 0 0 20px rgba(124, 58, 237, 0.15);
+  --shadow-glow-cyan: 0 0 20px rgba(6, 182, 212, 0.15);
+
+  /* Foreground / Background for shadcn compat */
+  --color-background: #0a0a0f;
+  --color-foreground: #f1f5f9;
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+/* ============================================================
+   THEME SYSTEM via CSS CUSTOM PROPERTIES (Phase 0.4)
+   ============================================================ */
+
+/* Default / Fantasy Theme */
+:root {
+  --color-accent: #7c3aed;
+  --color-accent-secondary: #06b6d4;
+  --color-accent-rgb: 124, 58, 237;
+  --color-bg-base: #0a0a0f;
+  --color-bg-elevated: #12121a;
+  --color-bg-sidebar: #0d0d14;
+  --color-border: #1e1e2e;
+  --color-border-hover: #2e2e4e;
+  --color-glow: rgba(124, 58, 237, 0.15);
+  --color-text-primary: #f1f5f9;
+  --color-text-secondary: #94a3b8;
+  --color-text-muted: #475569;
+  --theme-backdrop-image: url('/images/themes/fantasy-backdrop.jpg');
+
+  /* shadcn overrides */
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: #ffffff;
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+  --radius: 0.625rem;
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --chart-1: oklch(0.809 0.105 251.813);
+  --chart-2: oklch(0.623 0.214 259.815);
+  --chart-3: oklch(0.546 0.245 262.881);
+  --chart-4: oklch(0.488 0.243 264.376);
+  --chart-5: oklch(0.424 0.199 265.638);
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+}
+
+[data-theme="fantasy"] {
+  --color-accent: #7c3aed;
+  --color-accent-secondary: #06b6d4;
+  --color-accent-rgb: 124, 58, 237;
+  --color-bg-base: #0a0a0f;
+  --color-bg-elevated: #12121a;
+  --color-bg-sidebar: #0d0d14;
+  --color-border: #1e1e2e;
+  --color-border-hover: #2e2e4e;
+  --color-glow: rgba(124, 58, 237, 0.15);
+  --color-text-primary: #f1f5f9;
+  --color-text-secondary: #94a3b8;
+  --color-text-muted: #475569;
+  --theme-backdrop-image: url('/images/themes/fantasy-backdrop.jpg');
+}
+
+[data-theme="scifi"] {
+  --color-accent: #06b6d4;
+  --color-accent-secondary: #3b82f6;
+  --color-accent-rgb: 6, 182, 212;
+  --color-bg-base: #080d14;
+  --color-bg-elevated: #0d1520;
+  --color-bg-sidebar: #0a1120;
+  --color-border: #1a2535;
+  --color-border-hover: #253548;
+  --color-glow: rgba(6, 182, 212, 0.15);
+  --color-text-primary: #e2e8f0;
+  --color-text-secondary: #7db5d0;
+  --color-text-muted: #3d6080;
+  --theme-backdrop-image: url('/images/themes/scifi-backdrop.jpg');
+}
+
+[data-theme="western"] {
+  --color-accent: #d97706;
+  --color-accent-secondary: #a16207;
+  --color-accent-rgb: 217, 119, 6;
+  --color-bg-base: #0f0b08;
+  --color-bg-elevated: #1a1208;
+  --color-bg-sidebar: #130e06;
+  --color-border: #2a1f14;
+  --color-border-hover: #3d2e1e;
+  --color-glow: rgba(217, 119, 6, 0.15);
+  --color-text-primary: #fef3c7;
+  --color-text-secondary: #b58a60;
+  --color-text-muted: #6b4d35;
+  --theme-backdrop-image: url('/images/themes/western-backdrop.jpg');
+}
+
+[data-theme="eldritch"] {
+  --color-accent: #16a34a;
+  --color-accent-secondary: #15803d;
+  --color-accent-rgb: 22, 163, 74;
+  --color-bg-base: #080d08;
+  --color-bg-elevated: #0d150d;
+  --color-bg-sidebar: #0a100a;
+  --color-border: #1a2e1a;
+  --color-border-hover: #253e25;
+  --color-glow: rgba(22, 163, 74, 0.15);
+  --color-text-primary: #dcfce7;
+  --color-text-secondary: #5aa870;
+  --color-text-muted: #2d5c3a;
+  --theme-backdrop-image: url('/images/themes/eldritch-backdrop.jpg');
+}
+
+[data-theme="steampunk"] {
+  --color-accent: #ca8a04;
+  --color-accent-secondary: #a16207;
+  --color-accent-rgb: 202, 138, 4;
+  --color-bg-base: #0d0a06;
+  --color-bg-elevated: #181208;
+  --color-bg-sidebar: #130e06;
+  --color-border: #2e2414;
+  --color-border-hover: #42341e;
+  --color-glow: rgba(202, 138, 4, 0.15);
+  --color-text-primary: #fef9ec;
+  --color-text-secondary: #c4a35a;
+  --color-text-muted: #7a6040;
+  --theme-backdrop-image: url('/images/themes/steampunk-backdrop.jpg');
+}
+
+/* ============================================================
+   NOISE TEXTURE OVERLAY
+   ============================================================ */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  pointer-events: none;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 256px 256px;
+}
+
+/* ============================================================
+   BASE STYLES
+   ============================================================ */
+body {
+  background: var(--color-bg-base);
+  color: var(--color-text-primary);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Selection */
+::selection {
+  background: var(--color-accent);
+  color: white;
+}
+
+/* ============================================================
+   CUSTOM SCROLLBAR
+   ============================================================ */
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-border-hover);
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border) transparent;
+}
+
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+  --chart-1: oklch(0.809 0.105 251.813);
+  --chart-2: oklch(0.623 0.214 259.815);
+  --chart-3: oklch(0.546 0.245 262.881);
+  --chart-4: oklch(0.488 0.243 264.376);
+  --chart-5: oklch(0.424 0.199 265.638);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.556 0 0);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
+  }
+}
