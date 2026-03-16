@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { ArrowLeft } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { updateNote } from '@/lib/queries/notes';
@@ -69,6 +69,12 @@ export function StoryNotesClient({
   const handleBack = useCallback(() => {
     setMobileShowEditor(false);
   }, []);
+
+  useEffect(() => {
+    if (!selectedNote && notes.length > 0) {
+      setSelectedNote(notes[0] ?? null);
+    }
+  }, [notes, selectedNote]);
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] h-[calc(100vh-64px)] overflow-hidden">

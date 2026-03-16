@@ -1,15 +1,23 @@
+import React from 'react';
 import { HeroBanner } from './hero-banner';
 import { QuickStats } from './quick-stats';
 import { NextEncounterCard } from './next-encounter-card';
 import { PartyOverview } from './party-overview';
 import { RecentNotesRow } from './recent-notes-row';
-import type { Tables } from '@/types/database';
 
-interface CampaignStats {
-  playerCount: number;
-  npcCount: number;
-  encounterCount: number;
-  avgDC: number;
+interface Enemy {
+  name: string;
+  hp: number;
+  ac: number;
+  atk: string | number;
+  dmg?: string;
+}
+
+interface Encounter {
+  name: string;
+  description: string;
+  status: string;
+  enemies: Enemy[];
 }
 
 interface PartyMember {
@@ -23,7 +31,7 @@ interface PartyMember {
   user_avatar: string | null;
 }
 
-interface Note {
+interface RecentNote {
   id: string;
   title: string;
   content: string | null;
@@ -32,42 +40,79 @@ interface Note {
   author_name: string;
 }
 
-interface DmDashboardProps {
-  campaign: Tables<'campaigns'>;
-  stats: CampaignStats;
-  encounter: Tables<'encounters'> | null;
-  partyMembers: PartyMember[];
-  recentNotes: Note[];
+interface CampaignStats {
+  playerCount: number;
+  npcCount: number;
+  encounterCount: number;
+  avgDC: number;
 }
 
-export function DmDashboard({
+interface Campaign {
+  id: string;
+  name: string;
+  description: string | null;
+  status: string;
+}
+
+interface DMDashboardProps {
+  campaign: Campaign;
+  stats: CampaignStats;
+  encounter: Encounter | null;
+  partyMembers: PartyMember[];
+  recentNotes: RecentNote[];
+}
+
+export const DMDashboard: React.FC<DMDashboardProps> = ({
   campaign,
   stats,
   encounter,
   partyMembers,
   recentNotes,
-}: DmDashboardProps) {
-  const sessionNumber = Math.ceil(recentNotes.length / 2) || 1;
-  const sessionTitle = 'Campaign Session';
+}) => {
+  // Map stats to QuickStats format
+  const quickStats = {
+    playerCount: stats.playerCount,
+    npcCount: stats.npcCount,
+    encounterCount: stats.encounterCount,
+    avgSuccessRate: stats.avgDC,
+  };
+
+  // Map party members to PartyOverview format
+  const mappedMembers = partyMembers.map((m) => ({
+    name: m.name,
+    class: m.char_class,
+    level: m.level,
+    currentHp: m.hp_current,
+    maxHp: m.hp_max,
+    avatarUrl: m.user_avatar ?? undefined,
+  }));
+
+  // Map notes to RecentNotesRow format
+  const mappedNotes = recentNotes.map((n) => ({
+    id: n.id,
+    title: n.title,
+    content: n.content ?? '',
+    tag: n.tag,
+    createdAt: new Date(n.created_at),
+    authorName: n.author_name,
+  }));
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="w-full space-y-6">
       <HeroBanner
         campaignName={campaign.name}
-        sessionNumber={sessionNumber}
-        sessionTitle={sessionTitle}
+        sessionNumber={0}
+        sessionTitle={campaign.description ?? ''}
       />
 
-      <QuickStats stats={stats} />
+      <QuickStats stats={quickStats} />
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2">
-          <NextEncounterCard encounter={encounter as any} />
-        </div>
-        <PartyOverview members={partyMembers} />
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <NextEncounterCard encounter={encounter ?? undefined} />
+        <PartyOverview members={mappedMembers} />
       </div>
 
-      <RecentNotesRow notes={recentNotes} />
+      <RecentNotesRow notes={mappedNotes} />
     </div>
   );
-}
+};

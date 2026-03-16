@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import type { Tables } from '@/types/database';
 
@@ -19,7 +19,7 @@ export function useCampaign(): UseCampaignReturn {
   const [campaign, setCampaign] = useState<Tables<'campaigns'> | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const supabase = createClient();
+  const supabaseRef = useRef(createClient());
 
   const fetchCampaign = useCallback(async () => {
     try {
@@ -28,7 +28,7 @@ export function useCampaign(): UseCampaignReturn {
 
       const {
         data: { user },
-      } = await supabase.auth.getUser();
+      } = await supabaseRef.current.auth.getUser();
 
       if (!user) {
         setCampaign(null);
@@ -36,11 +36,12 @@ export function useCampaign(): UseCampaignReturn {
         return;
       }
 
-      // First, check if user is a DM
-      const { data: dmCampaigns, error: dmError } = await supabase
+      // First, check if user is a DM (exclude template campaigns)
+      const { data: dmCampaigns, error: dmError } = await supabaseRef.current
         .from('campaigns')
         .select('*')
         .eq('dm_user_id', user.id)
+        .eq('is_template', false)
         .limit(1);
 
       if (dmError) throw dmError;
@@ -51,7 +52,7 @@ export function useCampaign(): UseCampaignReturn {
       }
 
       // If not a DM, check if user has a character in any campaign
-      const { data: characterCampaigns, error: charError } = await supabase
+      const { data: characterCampaigns, error: charError } = await supabaseRef.current
         .from('characters')
         .select('campaign_id')
         .eq('user_id', user.id)
@@ -72,7 +73,7 @@ export function useCampaign(): UseCampaignReturn {
       }
 
       // Get the campaign the character belongs to
-      const { data: campaignData, error: campaignError } = await supabase
+      const { data: campaignData, error: campaignError } = await supabaseRef.current
         .from('campaigns')
         .select('*')
         .eq('id', campaignId)
@@ -88,7 +89,7 @@ export function useCampaign(): UseCampaignReturn {
       setIsLoading(false);
       console.error('useCampaign error:', err);
     }
-  }, [supabase]);
+  }, []);
 
   useEffect(() => {
     fetchCampaign();

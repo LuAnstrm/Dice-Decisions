@@ -1,5 +1,5 @@
+import React from 'react';
 import { Play, FileText } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 
 interface HeroBannerProps {
   campaignName: string;
@@ -8,53 +8,54 @@ interface HeroBannerProps {
   heroImageUrl?: string;
 }
 
-export function HeroBanner({
+export const HeroBanner: React.FC<HeroBannerProps> = ({
   campaignName,
   sessionNumber,
   sessionTitle,
   heroImageUrl,
-}: HeroBannerProps) {
-  const bgStyle = heroImageUrl
-    ? {
-        backgroundImage: `linear-gradient(to right, rgba(0,0,0,0.8), rgba(0,0,0,0.5), rgba(0,0,0,0)), url(${heroImageUrl})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-      }
-    : {
-        background:
-          'linear-gradient(135deg, rgba(15,15,35,1) 0%, rgba(30,20,60,0.8) 100%)',
-      };
-
+}) => {
   return (
     <div
-      className="w-full rounded-xl overflow-hidden shadow-lg mb-6 flex flex-col justify-center"
-      style={{ ...bgStyle, height: '300px' }}
+      className="relative w-full h-80 rounded-lg overflow-hidden"
+      style={{
+        backgroundImage: heroImageUrl ? `url(${heroImageUrl})` : 'linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      }}
     >
-      <div className="pl-10 md:pl-12">
-        <p className="text-xs md:text-sm font-semibold uppercase tracking-widest text-[#7c3aed] mb-2">
-          Current Campaign: {campaignName}
+      {/* Gradient overlay */}
+      <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-transparent" />
+
+      {/* Content */}
+      <div className="relative h-full flex flex-col justify-center items-start px-8 py-12">
+        <p className="text-white/60 text-sm uppercase tracking-widest mb-2">
+          Session {sessionNumber}
         </p>
-        <h1 className="text-3xl md:text-5xl font-bold text-white mb-6 max-w-2xl">
-          Session {sessionNumber} — {sessionTitle}
+        <h1 className="text-4xl md:text-5xl font-bold text-white mb-2">
+          {campaignName}
         </h1>
+        <p className="text-xl text-white/80 mb-8">
+          {sessionTitle}
+        </p>
+
+        {/* Action Buttons */}
         <div className="flex gap-4">
-          <Button
-            size="lg"
-            className="bg-[#7c3aed] hover:bg-[#6d28d9] text-white font-semibold"
+          <button
+            className="flex items-center gap-2 px-6 py-3 bg-[#7c3aed] hover:bg-[#6d28d9] text-white font-semibold rounded-lg transition-colors duration-200"
+            aria-label="Continue Session"
           >
-            <Play className="w-4 h-4 mr-2" />
+            <Play size={18} />
             Continue Session
-          </Button>
-          <Button
-            size="lg"
-            variant="outline"
-            className="border-white/20 text-white hover:bg-white/10"
+          </button>
+          <button
+            className="flex items-center gap-2 px-6 py-3 border border-white/20 hover:border-white/40 text-white font-semibold rounded-lg transition-colors duration-200"
+            aria-label="Session Logs"
           >
-            <FileText className="w-4 h-4 mr-2" />
+            <FileText size={18} />
             Session Logs
-          </Button>
+          </button>
         </div>
       </div>
     </div>
   );
-}
+};

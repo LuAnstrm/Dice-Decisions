@@ -1,102 +1,95 @@
-import Link from 'next/link';
-import { ArrowRight } from 'lucide-react';
+import React from 'react';
+import { formatDistanceToNow } from 'date-fns';
 
 interface Note {
   id: string;
   title: string;
-  content: string | null;
+  content: string;
   tag: string;
-  created_at: string;
-  author_name: string;
+  createdAt: Date;
+  authorName: string;
 }
 
 interface RecentNotesRowProps {
   notes: Note[];
 }
 
-function getTagColor(tag: string): { bg: string; text: string } {
-  const tagColorMap: { [key: string]: { bg: string; text: string } } = {
-    session_log: { bg: 'bg-blue-500/20', text: 'text-blue-300' },
-    world_lore: { bg: 'bg-purple-500/20', text: 'text-purple-300' },
-    plot: { bg: 'bg-emerald-500/20', text: 'text-emerald-300' },
-    dm_secret: { bg: 'bg-red-500/20', text: 'text-red-300' },
+const getTagColor = (tag: string): string => {
+  const colorMap: Record<string, string> = {
+    combat: 'bg-red-500/20 text-red-300',
+    story: 'bg-blue-500/20 text-blue-300',
+    npc: 'bg-purple-500/20 text-purple-300',
+    loot: 'bg-yellow-500/20 text-yellow-300',
+    quest: 'bg-green-500/20 text-green-300',
+    encounter: 'bg-orange-500/20 text-orange-300',
+    note: 'bg-white/10 text-white/70',
   };
-  return tagColorMap[tag] || { bg: 'bg-gray-500/20', text: 'text-gray-300' };
-}
+  return colorMap[tag.toLowerCase()] || 'bg-white/10 text-white/70';
+};
 
-function formatDate(dateString: string): string {
-  const date = new Date(dateString);
-  const now = new Date();
-  const diffMs = now.getTime() - date.getTime();
-  const diffMins = Math.floor(diffMs / 60000);
-  const diffHours = Math.floor(diffMins / 60);
-  const diffDays = Math.floor(diffHours / 24);
+const truncateContent = (content: string, maxLength: number = 120): string => {
+  if (content.length <= maxLength) return content;
+  return content.substring(0, maxLength) + '...';
+};
 
-  if (diffMins < 1) return 'Just now';
-  if (diffMins < 60) return `${diffMins}m ago`;
-  if (diffHours < 24) return `${diffHours}h ago`;
-  if (diffDays === 1) return 'Yesterday';
-  if (diffDays < 7) return `${diffDays}d ago`;
-  return date.toLocaleDateString();
-}
-
-export function RecentNotesRow({ notes }: RecentNotesRowProps) {
-  if (notes.length === 0) {
-    return (
-      <div className="w-full">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold text-white">Recent Notes</h2>
-        </div>
-        <div className="bg-[#0f0f23] border border-white/5 rounded-xl p-12 flex items-center justify-center min-h-[200px] text-white/40">
-          <p>Start documenting your campaign</p>
-        </div>
-      </div>
-    );
-  }
-
+export const RecentNotesRow: React.FC<RecentNotesRowProps> = ({ notes }) => {
   return (
     <div className="w-full">
+      {/* Header */}
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-bold text-white">Recent Notes</h2>
-        <Link
-          href="/campaign/story-notes"
-          className="inline-flex items-center gap-2 text-[#7c3aed] hover:text-[#a78bfa] text-sm font-semibold transition-colors"
+        <h2 className="text-xl font-bold text-white">Recent Notes</h2>
+        <a
+          href="/notes"
+          className="text-[#7c3aed] hover:text-[#a78bfa] text-sm font-semibold transition-colors"
         >
           VIEW ALL
-          <ArrowRight className="w-4 h-4" />
-        </Link>
+        </a>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {notes.map((note) => {
-          const tagColor = getTagColor(note.tag);
-          return (
+      {/* Notes Grid */}
+      {notes && notes.length > 0 ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {notes.slice(0, 3).map((note) => (
             <div
               key={note.id}
-              className="bg-[#0f0f23] border border-white/5 rounded-xl p-4 flex flex-col"
+              className="bg-[#0f0f23] border border-white/5 rounded-lg p-6 hover:border-white/10 transition-colors cursor-pointer"
             >
+              {/* Tag Badge */}
               <div className="mb-3">
                 <span
-                  className={`text-xs uppercase font-semibold px-2 py-1 rounded ${tagColor.bg} ${tagColor.text}`}
+                  className={`inline-block text-xs font-semibold px-2 py-1 rounded ${getTagColor(note.tag)}`}
                 >
-                  {note.tag.replace('_', ' ')}
+                  {note.tag.toUpperCase()}
                 </span>
               </div>
-              <h3 className="text-sm font-bold text-white mb-2 line-clamp-2">
+
+              {/* Title */}
+              <h3 className="text-lg font-bold text-white mb-3 line-clamp-2">
                 {note.title}
               </h3>
-              {note.content && (
-                <p className="text-xs text-white/60 mb-3 line-clamp-2">
-                  {note.content}
-                </p>
-              )}
-              <div className="mt-auto text-xs text-white/40">
-                {formatDate(note.created_at)} by {note.author_name}
+
+              {/* Content Preview */}
+              <p className="text-white/60 text-sm mb-4 line-clamp-3">
+                {truncateContent(note.content)}
+              </p>
+
+              {/* Footer */}
+              <div className="flex items-center justify-between text-xs text-white/50">
+                <span className="font-mono">
+                  {note.authorName}
+                </span>
+                <span>
+                  {formatDistanceToNow(note.createdAt, { addSuffix: true })}
+                </span>
               </div>
             </div>
-          );
-        })}
-      </div>
+          ))}
+        </div>
+      ) : (
+        <div className="bg-[#0f0f23] border border-white/5 rounded-lg py-12 flex items-center justify-center">
+          <p className="text-white/50 text-center">No notes yet. Start documenting your session!</p>
+        </div>
+      )}
     </div>
   );
-}
+};

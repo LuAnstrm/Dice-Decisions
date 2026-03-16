@@ -14,10 +14,13 @@ import {
   UserCircle,
   Settings,
   ChevronLeft,
+  LogOut,
 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { useRole } from '@/components/providers/role-provider';
 import { useSidebarCollapse } from '@/components/providers/sidebar-provider';
+import { useAuth } from '@/hooks/use-auth';
 import { D20Logo } from '@/components/shared/d20-logo';
 import { BadgeRpg } from '@/components/shared/badge-rpg';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
@@ -64,7 +67,14 @@ const NAV_GROUPS: NavGroup[] = [
 export function Sidebar() {
   const { isCollapsed, setIsCollapsed } = useSidebarCollapse();
   const pathname = usePathname();
+  const router = useRouter();
   const { role, isDM } = useRole();
+  const { signOut } = useAuth();
+
+  const handleSignOut = async () => {
+    await signOut();
+    router.push('/login');
+  };
 
   return (
     <aside
@@ -179,16 +189,29 @@ export function Sidebar() {
         isCollapsed ? 'flex flex-col items-center gap-3' : 'flex items-center gap-2'
       )}>
         {isCollapsed && (
-          <Link
-            href="/settings"
-            className="hover:text-[var(--color-text-secondary)] transition-colors p-2 rounded-lg hover:bg-white/5"
-            title="Settings"
-          >
-            <Settings
-              size={20}
-              className="text-[var(--color-text-muted)] hover:text-[var(--color-accent)] transition-colors"
-            />
-          </Link>
+          <>
+            <Link
+              href="/settings"
+              className="hover:text-[var(--color-text-secondary)] transition-colors p-2 rounded-lg hover:bg-white/5"
+              title="Settings"
+            >
+              <Settings
+                size={20}
+                className="text-[var(--color-text-muted)] hover:text-[var(--color-accent)] transition-colors"
+              />
+            </Link>
+            <button
+              onClick={handleSignOut}
+              className="hover:text-[var(--color-text-secondary)] transition-colors p-2 rounded-lg hover:bg-white/5"
+              title="Sign Out"
+              type="button"
+            >
+              <LogOut
+                size={20}
+                className="text-[var(--color-text-muted)] hover:text-red-400 transition-colors"
+              />
+            </button>
+          </>
         )}
         <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[var(--color-accent)] to-[var(--color-accent-secondary)] flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
           {isDM ? 'D' : 'P'}
@@ -213,6 +236,17 @@ export function Sidebar() {
                 className="text-[var(--color-text-muted)] hover:text-[var(--color-accent)] transition-colors"
               />
             </Link>
+            <button
+              onClick={handleSignOut}
+              className="hover:text-[var(--color-text-secondary)] transition-colors p-2 rounded-lg hover:bg-white/5 flex-shrink-0"
+              title="Sign Out"
+              type="button"
+            >
+              <LogOut
+                size={18}
+                className="text-[var(--color-text-muted)] hover:text-red-400 transition-colors"
+              />
+            </button>
           </>
         )}
       </div>

@@ -37,11 +37,12 @@ export async function getActiveCampaign(
   userId: string
 ): Promise<Tables<'campaigns'> | null> {
   try {
-    // First, check if user is a DM
+    // First, check if user is a DM (exclude templates)
     const { data: dmCampaigns, error: dmError } = await supabase
       .from('campaigns')
       .select('*')
       .eq('dm_user_id', userId)
+      .eq('is_template', false)
       .limit(1);
 
     if (dmError) throw dmError;

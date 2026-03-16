@@ -47,7 +47,13 @@ export default function MapsPage() {
 
   // Fetch maps list
   const fetchMaps = useCallback(async () => {
-    if (!campaign) return;
+    if (!campaign) {
+      setMaps([]);
+      setSelectedMapId(null);
+      setSelectedMap(null);
+      setIsLoading(false);
+      return;
+    }
     try {
       setIsLoading(true);
       const data = await getMaps(supabase, campaign.id);
@@ -193,7 +199,7 @@ export default function MapsPage() {
           isDM ? (
             <Button
               onClick={() => setIsUploadOpen(true)}
-              className="bg-[var(--color-accent)] hover:bg-[var(--color-accent)]/80 text-white gap-2"
+              className="bg-(--color-accent) hover:bg-accent/80 text-white gap-2"
               size="sm"
             >
               <Upload size={16} />
@@ -223,7 +229,7 @@ export default function MapsPage() {
       <div className="flex-1 relative overflow-hidden">
         {isLoading ? (
           <div className="flex items-center justify-center h-full">
-            <div className="text-[var(--color-text-muted)] text-sm">Loading maps...</div>
+            <div className="text-(--color-text-muted) text-sm">Loading maps...</div>
           </div>
         ) : maps.length === 0 ? (
           <EmptyState
