@@ -44,7 +44,7 @@ export function MarkerPopup({
         transformOrigin: 'bottom center',
       }}
     >
-      <div className="w-[280px] bg-[rgba(15,15,25,0.95)] backdrop-blur-sm border border-white/10 rounded-lg shadow-xl p-4">
+      <div className="w-[280px] bg-[rgba(15,15,25,0.95)] backdrop-blur-sm border border-[var(--color-border)] rounded-lg shadow-xl p-4">
         {/* Header */}
         <div className="flex items-start justify-between mb-2">
           <span

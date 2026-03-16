@@ -118,7 +118,7 @@ export function MarkerForm({
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="sm:max-w-md bg-[rgba(15,15,25,0.98)] border-white/10">
+      <DialogContent className="sm:max-w-md bg-[rgba(15,15,25,0.98)] border-[var(--color-border)]">
         <DialogHeader>
           <DialogTitle className="text-[var(--color-text-primary)] font-display">
             {existingMarker ? 'Edit Marker' : 'New Marker'}
@@ -135,7 +135,7 @@ export function MarkerForm({
               value={label}
               onChange={(e) => setLabel(e.target.value)}
               placeholder="e.g., Goblin Ambush"
-              className="bg-[rgba(20,20,30,0.8)] border-white/10"
+              className="bg-[rgba(20,20,30,0.8)] border-[var(--color-border)]"
               maxLength={100}
             />
           </div>
@@ -149,7 +149,7 @@ export function MarkerForm({
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               placeholder="e.g., 4 goblins patrol this corridor. DC 14 Stealth to sneak past."
-              className="bg-[rgba(20,20,30,0.8)] border-white/10 min-h-[80px]"
+              className="bg-[rgba(20,20,30,0.8)] border-[var(--color-border)] min-h-[80px]"
               maxLength={500}
             />
             <p className="text-xs text-[var(--color-text-muted)] mt-1 text-right">
@@ -173,7 +173,7 @@ export function MarkerForm({
                     className={`flex flex-col items-center gap-1.5 p-2 rounded-lg border transition-colors ${
                       iconType === type
                         ? 'border-[var(--color-accent)] bg-[var(--color-accent)]/10'
-                        : 'border-white/10 hover:border-white/20 bg-[rgba(20,20,30,0.5)]'
+                        : 'border-[var(--color-border)] hover:border-white/20 bg-[rgba(20,20,30,0.5)]'
                     }`}
                   >
                     <span

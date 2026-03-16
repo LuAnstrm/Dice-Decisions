@@ -73,7 +73,7 @@ export function ThemeSelector({ currentTheme }: ThemeSelectorProps) {
               className={`relative p-6 rounded-lg h-40 flex flex-col items-center justify-center transition-all ${
                 isSelected
                   ? 'border-2 border-[#7c3aed] shadow-lg shadow-purple-500/50'
-                  : 'border border-white/10 hover:border-white/20'
+                  : 'border border-[var(--color-border)] hover:border-white/20'
               } bg-gradient-to-br ${theme.gradient}`}
               style={{ opacity: isSelected ? 1 : 0.8 }}
             >

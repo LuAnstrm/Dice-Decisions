@@ -69,10 +69,10 @@ export function DistributionChart({
     }));
 
   return (
-    <RpgCard variant="default" className="overflow-hidden border-white/10 bg-[linear-gradient(180deg,rgba(14,18,28,0.96),rgba(10,13,19,0.98))]">
+    <RpgCard variant="default" className="overflow-hidden border-[var(--color-border)] bg-[linear-gradient(180deg,rgba(14,18,28,0.96),rgba(10,13,19,0.98))]">
       <div className="mb-4 flex flex-wrap items-start justify-between gap-4">
         <div className="flex items-start gap-3">
-          <div className="relative h-11 w-11 shrink-0 overflow-hidden rounded-2xl border border-white/10 bg-white/5">
+          <div className="relative h-11 w-11 shrink-0 overflow-hidden rounded-2xl border border-[var(--color-border)] bg-white/5">
             <Image src="/images/icons/fantasy/pie-chart.png" alt="" fill className="object-contain p-2.5 opacity-95" />
           </div>
           <div>

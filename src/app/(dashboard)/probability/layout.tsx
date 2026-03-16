@@ -63,7 +63,7 @@ export default function ProbabilityLayout({
             </div>
 
             <div className="flex flex-wrap items-center gap-2 text-xs">
-              <span className="rounded-full border border-white/10 bg-black/20 px-3 py-1 font-mono uppercase tracking-[0.2em] text-[var(--color-text-secondary)]">
+              <span className="rounded-full border border-[var(--color-border)] bg-black/20 px-3 py-1 font-mono uppercase tracking-[0.2em] text-[var(--color-text-secondary)]">
                 Theme {themeConfig.name}
               </span>
               <span className="rounded-full border border-[var(--color-accent)]/30 bg-[var(--color-accent)]/10 px-3 py-1 font-mono uppercase tracking-[0.2em] text-[var(--color-text-primary)]">
@@ -87,7 +87,7 @@ export default function ProbabilityLayout({
                   )}
                 >
                   <div className="flex items-start gap-4">
-                    <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-2xl border border-white/10 bg-white/5">
+                    <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-2xl border border-[var(--color-border)] bg-white/5">
                       <Image src={tab.icon} alt="" fill className="object-contain p-2.5 opacity-95" />
                     </div>
                     <div className="min-w-0">

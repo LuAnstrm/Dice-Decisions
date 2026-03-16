@@ -77,7 +77,7 @@ export function ProfileForm({ profile }: ProfileFormProps) {
           <Input
             value={displayName}
             onChange={(e) => setDisplayName(e.target.value)}
-            className="bg-[#16161f] border-white/10 text-white"
+            className="bg-[var(--color-surface-input)] border-[var(--color-border)] text-white"
             placeholder="Your display name"
           />
         </div>
@@ -91,7 +91,7 @@ export function ProfileForm({ profile }: ProfileFormProps) {
             <Input
               value={profile.email}
               disabled
-              className="bg-[#16161f] border-white/10 text-white/40 pr-10"
+              className="bg-[var(--color-surface-input)] border-[var(--color-border)] text-white/40 pr-10"
             />
             <Lock className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
           </div>
@@ -102,7 +102,7 @@ export function ProfileForm({ profile }: ProfileFormProps) {
           <Button
             onClick={handleSave}
             disabled={isSubmitting}
-            className="bg-[#7c3aed] hover:bg-[#6d28d9] text-white font-semibold"
+            className="bg-[var(--color-accent)] hover:bg-[var(--color-accent)]/90 text-white font-semibold"
           >
             {isSubmitting ? 'Saving...' : 'Save Changes'}
           </Button>

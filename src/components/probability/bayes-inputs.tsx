@@ -48,12 +48,12 @@ export function BayesInputs({ input, onChange, scenario }: BayesInputsProps) {
       header={{
         title: 'Model Inputs',
         icon: (
-          <div className="relative h-8 w-8 overflow-hidden rounded-xl border border-white/10 bg-white/5">
+          <div className="relative h-8 w-8 overflow-hidden rounded-xl border border-[var(--color-border)] bg-white/5">
             <Image src="/images/icons/fantasy/magic-swirl.png" alt="" fill className="object-contain p-1.5 opacity-95" />
           </div>
         ),
       }}
-      className="border-white/10 bg-[linear-gradient(180deg,rgba(15,18,24,0.95),rgba(10,12,18,0.98))]"
+      className="border-[var(--color-border)] bg-[linear-gradient(180deg,rgba(15,18,24,0.95),rgba(10,12,18,0.98))]"
     >
       <div className="space-y-6">
         {sliders.map((s) => (

@@ -49,7 +49,7 @@ export function PlayerNoteCard({ note, onClick }: PlayerNoteCardProps) {
         )}
       </div>
 
-      <div className="text-xs text-[var(--color-text-muted)] pt-2 border-t border-white/5">
+      <div className="text-xs text-[var(--color-text-muted)] pt-2 border-t border-[var(--color-border)]">
         {timeAgo}
       </div>
     </RpgCard>

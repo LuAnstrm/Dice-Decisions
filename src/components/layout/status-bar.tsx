@@ -28,7 +28,7 @@ export function StatusBar() {
   };
 
   return (
-    <footer className="hidden md:flex fixed bottom-0 left-0 right-0 z-20 h-8 items-center px-4 bg-[#3a3a5c] border-t border-white/5 pointer-events-none">
+    <footer className="hidden md:flex fixed bottom-0 left-0 right-0 z-20 h-8 items-center px-4 bg-[var(--color-bg-sidebar)] border-t border-[var(--color-border)] pointer-events-none">
       <p className="font-mono text-[11px] text-gray-400 tracking-wide uppercase">
         {getStatusText()}
       </p>

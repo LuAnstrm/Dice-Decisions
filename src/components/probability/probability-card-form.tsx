@@ -63,12 +63,12 @@ export function ProbabilityCardForm({ onCalculate }: ProbabilityCardFormProps) {
   }
 
   return (
-    <RpgCard variant="probability" className="relative overflow-hidden border-white/10 bg-[linear-gradient(180deg,rgba(15,17,25,0.96),rgba(10,10,16,0.98))]">
+    <RpgCard variant="probability" className="relative overflow-hidden border-[var(--color-border)] bg-[linear-gradient(180deg,rgba(15,17,25,0.96),rgba(10,10,16,0.98))]">
       <div className="absolute -right-8 top-0 h-28 w-28 rounded-full bg-[var(--color-glow)] blur-3xl" />
 
       <div className="relative mb-6 flex items-start justify-between gap-4">
         <div className="flex items-start gap-3">
-          <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-2xl border border-white/10 bg-white/5">
+          <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-2xl border border-[var(--color-border)] bg-white/5">
             <Image src="/images/icons/fantasy/card-play.png" alt="" fill className="object-contain p-2.5 opacity-95" />
           </div>
           <div>
@@ -103,7 +103,7 @@ export function ProbabilityCardForm({ onCalculate }: ProbabilityCardFormProps) {
                 if (errors.actionName) setErrors((prev) => ({ ...prev, actionName: '' }));
               }}
               placeholder="e.g., Sneak Attack"
-              className="border-white/10 bg-black/30 text-(--color-text-primary)"
+              className="border-[var(--color-border)] bg-black/30 text-(--color-text-primary)"
             />
             {errors.actionName && (
               <p className="text-xs text-red-500 mt-1">{errors.actionName}</p>
@@ -115,10 +115,10 @@ export function ProbabilityCardForm({ onCalculate }: ProbabilityCardFormProps) {
               Dice
             </label>
             <Select value={diceType} onValueChange={(val) => setDiceType(val as DiceType)}>
-              <SelectTrigger className="w-full border-white/10 bg-black/30 text-(--color-text-primary)">
+              <SelectTrigger className="w-full border-[var(--color-border)] bg-black/30 text-(--color-text-primary)">
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent className="border-white/10 bg-(--color-bg-base) text-(--color-text-primary)">
+              <SelectContent className="border-[var(--color-border)] bg-(--color-bg-base) text-(--color-text-primary)">
                 {PROBABILITY_DICE_TYPES.map((d) => (
                   <SelectItem key={d.type} value={d.type}>
                     {d.label}
@@ -144,7 +144,7 @@ export function ProbabilityCardForm({ onCalculate }: ProbabilityCardFormProps) {
               }}
               min={1}
               max={10}
-              className="border-white/10 bg-black/30 text-(--color-text-primary)"
+              className="border-[var(--color-border)] bg-black/30 text-(--color-text-primary)"
             />
             {errors.diceCount && (
               <p className="text-xs text-red-500 mt-1">{errors.diceCount}</p>
@@ -164,7 +164,7 @@ export function ProbabilityCardForm({ onCalculate }: ProbabilityCardFormProps) {
               }}
               min={-20}
               max={20}
-              className="border-white/10 bg-black/30 text-(--color-text-primary)"
+              className="border-[var(--color-border)] bg-black/30 text-(--color-text-primary)"
             />
             {errors.modifier && (
               <p className="text-xs text-red-500 mt-1">{errors.modifier}</p>
@@ -184,7 +184,7 @@ export function ProbabilityCardForm({ onCalculate }: ProbabilityCardFormProps) {
               }}
               min={1}
               max={40}
-              className="border-white/10 bg-black/30 text-(--color-text-primary)"
+              className="border-[var(--color-border)] bg-black/30 text-(--color-text-primary)"
             />
             {errors.targetDC && (
               <p className="text-xs text-red-500 mt-1">{errors.targetDC}</p>

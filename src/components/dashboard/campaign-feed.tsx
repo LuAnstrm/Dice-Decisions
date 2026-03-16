@@ -48,12 +48,12 @@ function formatDate(dateString: string): string {
 export function CampaignFeed({ feedItems }: CampaignFeedProps) {
   if (feedItems.length === 0) {
     return (
-      <div className="bg-[#0f0f23] border border-white/5 rounded-xl p-6 flex-1">
+      <div className="card-base p-6 flex-1">
         <div className="flex items-center gap-3 mb-6">
-          <Clock className="w-5 h-5 text-white/40" />
-          <h2 className="text-xl font-bold text-white">Campaign Feed</h2>
+          <Clock className="w-5 h-5 text-[var(--color-text-muted)]" />
+          <h2 className="text-xl font-bold text-[var(--color-text-primary)]">Campaign Feed</h2>
         </div>
-        <div className="flex items-center justify-center min-h-[300px] text-white/40">
+        <div className="flex items-center justify-center min-h-[300px] text-[var(--color-text-muted)]">
           <p>No campaign activity yet</p>
         </div>
       </div>
@@ -61,13 +61,13 @@ export function CampaignFeed({ feedItems }: CampaignFeedProps) {
   }
 
   return (
-    <div className="bg-[#0f0f23] border border-white/5 rounded-xl p-6 flex-1">
+    <div className="card-base p-6 flex-1">
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
-          <Clock className="w-5 h-5 text-white/40" />
-          <h2 className="text-xl font-bold text-white">Campaign Feed</h2>
+          <Clock className="w-5 h-5 text-[var(--color-text-muted)]" />
+          <h2 className="text-xl font-bold text-[var(--color-text-primary)]">Campaign Feed</h2>
         </div>
-        <Link href="/campaign" className="text-[#7c3aed] hover:text-[#a78bfa] text-sm font-semibold">
+        <Link href="/campaign" className="text-[var(--color-accent)] hover:underline text-sm font-semibold">
           View All
         </Link>
       </div>
@@ -76,24 +76,24 @@ export function CampaignFeed({ feedItems }: CampaignFeedProps) {
         {feedItems.map((item, idx) => (
           <div key={item.id} className="flex gap-4">
             <div className="relative flex flex-col items-center">
-              <div className="w-8 h-8 rounded-full bg-[#1e1e2e] border-2 border-[#7c3aed] flex items-center justify-center text-white/60">
+              <div className="w-8 h-8 rounded-full bg-[var(--color-bg-elevated)] border-2 border-[var(--color-accent)] flex items-center justify-center text-[var(--color-text-secondary)]">
                 {getFeedItemIcon(item.type)}
               </div>
               {idx < feedItems.length - 1 && (
-                <div className="w-0.5 h-8 bg-white/10 mt-2" />
+                <div className="w-0.5 h-8 bg-[var(--color-border)] mt-2" />
               )}
             </div>
             <div className="pb-4 flex-1">
               <div className="flex items-center gap-2 mb-1">
-                <h3 className="text-sm font-bold text-white">{item.title}</h3>
+                <h3 className="text-sm font-bold text-[var(--color-text-primary)]">{item.title}</h3>
                 <span
                   className={`text-xs uppercase font-semibold px-2 py-0.5 rounded-full ${getFeedItemColor(item.type)}`}
                 >
                   {item.category}
                 </span>
               </div>
-              <p className="text-xs text-white/60 mb-1">{formatDate(item.timestamp)}</p>
-              <p className="text-sm text-white/60 line-clamp-2">{item.description}</p>
+              <p className="text-xs text-[var(--color-text-muted)] mb-1">{formatDate(item.timestamp)}</p>
+              <p className="text-sm text-[var(--color-text-secondary)] line-clamp-2">{item.description}</p>
             </div>
           </div>
         ))}

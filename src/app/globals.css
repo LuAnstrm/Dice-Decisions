@@ -277,6 +277,28 @@ body {
 }
 
 /* ============================================================
+   CARD & INTERACTIVE UTILITIES
+   ============================================================ */
+.card-hover {
+  transition: all 0.2s ease-in-out;
+}
+.card-hover:hover {
+  border-color: var(--color-border-hover);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-card-hover);
+}
+
+.card-base {
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+}
+
+.glow-accent {
+  box-shadow: var(--shadow-glow-purple);
+}
+
+/* ============================================================
    CUSTOM SCROLLBAR
    ============================================================ */
 ::-webkit-scrollbar {

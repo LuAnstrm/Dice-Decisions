@@ -14,7 +14,7 @@ export function MapSelector({ maps, selectedMapId, onSelect }: MapSelectorProps)
   return (
     <>
       {/* Desktop: horizontal tabs */}
-      <div className="hidden md:flex items-center gap-1 px-4 py-1 border-b border-white/5 bg-[rgba(10,10,15,0.3)]">
+      <div className="hidden md:flex items-center gap-1 px-4 py-1 border-b border-[var(--color-border)] bg-[rgba(10,10,15,0.3)]">
         {maps.map((map) => (
           <button
             key={map.id}
@@ -32,11 +32,11 @@ export function MapSelector({ maps, selectedMapId, onSelect }: MapSelectorProps)
       </div>
 
       {/* Mobile: dropdown */}
-      <div className="md:hidden px-4 py-2 border-b border-white/5 bg-[rgba(10,10,15,0.3)]">
+      <div className="md:hidden px-4 py-2 border-b border-[var(--color-border)] bg-[rgba(10,10,15,0.3)]">
         <select
           value={selectedMapId}
           onChange={(e) => onSelect(e.target.value)}
-          className="w-full bg-[rgba(20,20,30,0.8)] border border-white/10 rounded-md px-3 py-1.5 text-xs text-[var(--color-text-primary)] font-mono"
+          className="w-full bg-[rgba(20,20,30,0.8)] border border-[var(--color-border)] rounded-md px-3 py-1.5 text-xs text-[var(--color-text-primary)] font-mono"
         >
           {maps.map((map) => (
             <option key={map.id} value={map.id}>

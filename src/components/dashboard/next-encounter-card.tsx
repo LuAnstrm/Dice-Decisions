@@ -1,5 +1,6 @@
 import React from 'react';
-import { Skull, Link as LinkIcon } from 'lucide-react';
+import { Skull, ArrowRight } from 'lucide-react';
+import Link from 'next/link';
 
 interface Enemy {
   name: string;
@@ -22,66 +23,55 @@ interface NextEncounterCardProps {
 export const NextEncounterCard: React.FC<NextEncounterCardProps> = ({ encounter }) => {
   if (!encounter) {
     return (
-      <div className="bg-[#0f0f23] border border-white/5 rounded-lg p-8 h-full flex items-center justify-center">
-        <p className="text-white/50 text-center">No encounter planned</p>
+      <div className="card-base p-8 h-full flex items-center justify-center">
+        <p className="text-[var(--color-text-muted)] text-center">No encounter planned</p>
       </div>
     );
   }
 
   return (
-    <div className="bg-[#0f0f23] border border-white/5 rounded-lg overflow-hidden h-full flex flex-col">
-      {/* Header */}
-      <div className="border-b border-white/5 px-6 py-4 flex items-center justify-between">
-        <h2 className="text-lg font-bold text-white">Next Encounter</h2>
-        <span className="text-xs font-semibold px-3 py-1 bg-yellow-500/20 text-yellow-400 rounded-full">
+    <div className="flex flex-col gap-4">
+      <div className="flex items-center justify-between">
+        <h4 className="font-semibold text-base text-[var(--color-text-primary)]">
+          Next Encounter
+        </h4>
+        <span className="px-3 py-1 bg-amber-500/10 text-amber-400 font-mono font-medium text-[10px] rounded-full tracking-wider uppercase">
           {encounter.status.toUpperCase()}
         </span>
       </div>
 
-      {/* Encounter Info */}
-      <div className="px-6 py-4 border-b border-white/5">
-        <h3 className="text-xl font-bold text-white mb-2">
-          {encounter.name}
-        </h3>
-        <p className="text-white/60 text-sm">
-          {encounter.description}
-        </p>
-      </div>
+      <div className="card-base p-6 flex flex-col gap-4">
+        <div>
+          <h5 className="font-semibold text-lg text-[var(--color-text-primary)]">
+            {encounter.name}
+          </h5>
+          <p className="text-sm text-[var(--color-text-secondary)] mt-1 line-clamp-2">
+            {encounter.description}
+          </p>
+        </div>
 
-      {/* Enemies List */}
-      <div className="flex-1 px-6 py-4">
-        <h4 className="text-xs uppercase tracking-widest text-white/60 mb-4 font-semibold">
-          Enemies
-        </h4>
-        <div className="space-y-3">
+        {/* Enemies List */}
+        <div className="flex flex-col gap-3 my-2">
           {encounter.enemies.map((enemy, index) => (
-            <div
-              key={index}
-              className="flex items-center justify-between p-3 bg-white/5 rounded-lg border border-white/10"
-            >
-              <div className="flex items-center gap-3">
-                <Skull size={18} className="text-red-400" />
-                <span className="font-semibold text-white">{enemy.name}</span>
-              </div>
-              <div className="flex gap-4 text-xs font-mono text-white/60">
-                <span>HP: <span className="text-white">{enemy.hp}</span></span>
-                <span>AC: <span className="text-white">{enemy.ac}</span></span>
-                <span>ATK: <span className="text-white">{enemy.atk}</span></span>
-              </div>
+            <div key={index} className="flex items-center gap-3">
+              <Skull size={18} className="text-red-400 shrink-0" />
+              <span className="font-medium text-[13px] text-[var(--color-text-primary)]">
+                {enemy.name}
+              </span>
+              <span className="font-mono text-xs text-[var(--color-text-muted)] ml-auto">
+                HP: {enemy.hp} | AC: {enemy.ac} | ATK: {enemy.atk}
+              </span>
             </div>
           ))}
         </div>
-      </div>
 
-      {/* Footer Link */}
-      <div className="border-t border-white/5 px-6 py-4">
-        <a
-          href="#"
-          className="flex items-center gap-2 text-[#7c3aed] hover:text-[#a78bfa] text-sm font-semibold transition-colors"
+        <Link
+          href="/probability/cards"
+          className="flex items-center gap-1 font-medium text-[13px] text-[var(--color-accent)] hover:underline w-fit"
         >
-          <LinkIcon size={16} />
           View Probability Cards
-        </a>
+          <ArrowRight size={14} />
+        </Link>
       </div>
     </div>
   );

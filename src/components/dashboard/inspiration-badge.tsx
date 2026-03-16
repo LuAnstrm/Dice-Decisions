@@ -10,7 +10,7 @@ export function InspirationBadge({ hasInspiration }: InspirationBadgeProps) {
       className={`flex items-center gap-3 p-4 rounded-lg mb-6 border ${
         hasInspiration
           ? 'bg-green-500/10 border-green-500/20'
-          : 'bg-white/5 border-white/10'
+          : 'bg-white/5 border-[var(--color-border)]'
       }`}
     >
       <Star

@@ -21,13 +21,13 @@ interface CharacterBannerProps {
 export function CharacterBanner({ character, campaignId }: CharacterBannerProps) {
   if (!character) {
     return (
-      <div className="bg-[#0f0f23] border border-white/5 rounded-xl p-12 flex flex-col items-center justify-center min-h-[250px]">
+      <div className="card-base p-12 flex flex-col items-center justify-center min-h-[250px]">
         <div className="text-6xl mb-4">✨</div>
-        <h2 className="text-2xl font-bold text-white mb-2">Create Your Character</h2>
-        <p className="text-white/60 mb-6 text-center max-w-sm">
+        <h2 className="text-2xl font-bold text-[var(--color-text-primary)] mb-2">Create Your Character</h2>
+        <p className="text-[var(--color-text-secondary)] mb-6 text-center max-w-sm">
           Design your hero and begin your adventure in this campaign.
         </p>
-        <Button className="bg-[#7c3aed] hover:bg-[#6d28d9] text-white">
+        <Button className="bg-[var(--color-accent)] hover:bg-[var(--color-accent)]/90 text-white">
           Get Started
         </Button>
       </div>
@@ -62,18 +62,18 @@ export function CharacterBanner({ character, campaignId }: CharacterBannerProps)
   ];
 
   return (
-    <div className="bg-[#0f0f23] border border-white/5 rounded-xl p-8 mb-6">
+    <div className="card-base p-8 mb-6">
       <div className="flex gap-8 mb-6">
-        <div className="w-20 h-20 rounded-full bg-gradient-to-br from-[#7c3aed] to-[#3b82f6] flex items-center justify-center flex-shrink-0">
+        <div className="w-20 h-20 rounded-lg bg-gradient-to-br from-[var(--color-accent)] to-[var(--color-accent-secondary)] flex items-center justify-center flex-shrink-0 border border-[var(--color-border)]">
           <span className="text-2xl font-bold text-white">
             {character.name.charAt(0).toUpperCase()}
           </span>
         </div>
         <div>
-          <h1 className="text-4xl font-bold text-white mb-1">{character.name}</h1>
-          <p className="text-white/60">
+          <h1 className="text-4xl font-bold text-[var(--color-text-primary)] font-[family-name:var(--font-display)] mb-1">{character.name}</h1>
+          <p className="text-[var(--color-text-secondary)]">
             {character.race} {character.char_class}{' '}
-            <span className="text-[#7c3aed]">Level {character.level}</span>
+            <span className="text-[var(--color-accent)]">Level {character.level}</span>
           </p>
         </div>
       </div>
@@ -94,10 +94,10 @@ export function CharacterBanner({ character, campaignId }: CharacterBannerProps)
       </div>
 
       <div className="flex gap-3">
-        <Button variant="outline" className="border-white/20 text-white hover:bg-white/10">
+        <Button variant="outline" className="border-[var(--color-border)] text-[var(--color-text-primary)] hover:bg-white/10">
           Edit Character
         </Button>
-        <Button className="bg-[#7c3aed] hover:bg-[#6d28d9] text-white">
+        <Button className="bg-[var(--color-accent)] hover:bg-[var(--color-accent)]/90 text-white shadow-lg shadow-[var(--color-glow)]">
           View Full Sheet
         </Button>
       </div>

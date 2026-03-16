@@ -15,47 +15,52 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
   heroImageUrl,
 }) => {
   return (
-    <div
-      className="relative w-full h-80 rounded-lg overflow-hidden"
-      style={{
-        backgroundImage: heroImageUrl ? `url(${heroImageUrl})` : 'linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%)',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-      }}
-    >
+    <section className="relative rounded-xl overflow-hidden border border-[var(--color-border)] group">
       {/* Gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-r from-[var(--color-bg-base)] via-[var(--color-bg-base)]/80 to-transparent z-10" />
+
+      {/* Background image with hover zoom */}
+      <div
+        className="h-64 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
+        style={{
+          backgroundImage: heroImageUrl
+            ? `url(${heroImageUrl})`
+            : 'var(--theme-backdrop-image)',
+        }}
+      />
 
       {/* Content */}
-      <div className="relative h-full flex flex-col justify-center items-start px-8 py-12">
-        <p className="text-white/60 text-sm uppercase tracking-widest mb-2">
-          Session {sessionNumber}
+      <div className="absolute inset-0 flex flex-col justify-center p-10 z-20">
+        <p className="text-[var(--color-accent)] font-bold uppercase tracking-[0.2em] text-xs mb-2">
+          Current Campaign{sessionNumber > 0 ? ` · Session ${sessionNumber}` : ''}
         </p>
-        <h1 className="text-4xl md:text-5xl font-bold text-white mb-2">
+        <h3 className="font-[family-name:var(--font-display)] text-4xl font-bold text-[var(--color-text-primary)] mb-4">
           {campaignName}
-        </h1>
-        <p className="text-xl text-white/80 mb-8">
-          {sessionTitle}
-        </p>
+        </h3>
+        {sessionTitle && (
+          <p className="text-[var(--color-text-secondary)] text-base mb-6 max-w-lg">
+            {sessionTitle}
+          </p>
+        )}
 
         {/* Action Buttons */}
-        <div className="flex gap-4">
+        <div className="flex items-center gap-4">
           <button
-            className="flex items-center gap-2 px-6 py-3 bg-[#7c3aed] hover:bg-[#6d28d9] text-white font-semibold rounded-lg transition-colors duration-200"
+            className="flex items-center gap-2 bg-[var(--color-accent)] hover:bg-[var(--color-accent)]/90 text-white px-6 py-2.5 rounded-lg text-sm font-bold transition-all shadow-lg shadow-[var(--color-glow)]"
             aria-label="Continue Session"
           >
-            <Play size={18} />
+            <Play size={16} />
             Continue Session
           </button>
           <button
-            className="flex items-center gap-2 px-6 py-3 border border-white/20 hover:border-white/40 text-white font-semibold rounded-lg transition-colors duration-200"
+            className="flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white backdrop-blur-sm px-6 py-2.5 rounded-lg text-sm font-bold border border-[var(--color-border)] transition-all"
             aria-label="Session Logs"
           >
-            <FileText size={18} />
+            <FileText size={16} />
             Session Logs
           </button>
         </div>
       </div>
-    </div>
+    </section>
   );
 };

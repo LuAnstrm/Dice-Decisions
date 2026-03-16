@@ -63,7 +63,7 @@ export function BayesResultDisplay({ result, scenario, onChain }: BayesResultDis
   }, [result.posterior]);
 
   return (
-    <RpgCard variant="default" className="overflow-hidden border-white/10 bg-[linear-gradient(180deg,rgba(17,20,28,0.95),rgba(10,12,18,0.98))]">
+    <RpgCard variant="default" className="overflow-hidden border-[var(--color-border)] bg-[linear-gradient(180deg,rgba(17,20,28,0.95),rgba(10,12,18,0.98))]">
       <div className="mb-5 flex items-start justify-between gap-4">
         <div>
           <p className="mb-2 font-mono text-[10px] font-semibold uppercase tracking-widest text-(--color-text-muted)">
@@ -73,7 +73,7 @@ export function BayesResultDisplay({ result, scenario, onChain }: BayesResultDis
             Updated belief after processing the selected observation.
           </p>
         </div>
-        <div className="relative h-11 w-11 shrink-0 overflow-hidden rounded-2xl border border-white/10 bg-white/5">
+        <div className="relative h-11 w-11 shrink-0 overflow-hidden rounded-2xl border border-[var(--color-border)] bg-white/5">
           <Image src="/images/icons/fantasy/third-eye.png" alt="" fill className="object-contain p-2.5 opacity-95" />
         </div>
       </div>

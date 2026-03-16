@@ -21,7 +21,7 @@ export function MobileNav() {
   const visibleItems = MOBILE_NAV_ITEMS.filter((item) => !item.dmOnly || isDM);
 
   return (
-    <nav className="md:hidden fixed bottom-8 left-0 right-0 z-40 h-16 flex items-center justify-around px-2 bg-[rgba(10,10,15,0.9)] backdrop-blur-md border-t border-white/5" style={{ bottom: '32px' }}>
+    <nav className="md:hidden fixed bottom-8 left-0 right-0 z-40 h-16 flex items-center justify-around px-2 bg-[rgba(10,10,15,0.9)] backdrop-blur-md border-t border-[var(--color-border)]" style={{ bottom: '32px' }}>
       {visibleItems.map((item) => {
         const isActive =
           pathname === item.href ||

@@ -61,7 +61,7 @@ export function AccountManagement() {
                 placeholder="Type DELETE to confirm"
                 value={deleteInput}
                 onChange={(e) => setDeleteInput(e.target.value.toUpperCase())}
-                className="w-full bg-[#16161f] border border-white/10 text-white rounded-lg px-3 py-2 placeholder:text-white/40"
+                className="w-full bg-[var(--color-surface-input)] border border-[var(--color-border)] text-white rounded-lg px-3 py-2 placeholder:text-white/40"
               />
               <div className="flex gap-2">
                 <Button

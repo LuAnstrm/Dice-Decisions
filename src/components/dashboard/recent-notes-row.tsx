@@ -37,10 +37,10 @@ export const RecentNotesRow: React.FC<RecentNotesRowProps> = ({ notes }) => {
     <div className="w-full">
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-xl font-bold text-white">Recent Notes</h2>
+        <h2 className="text-xl font-bold text-[var(--color-text-primary)]">Recent Notes</h2>
         <a
-          href="/notes"
-          className="text-[#7c3aed] hover:text-[#a78bfa] text-sm font-semibold transition-colors"
+          href="/campaign/story-notes"
+          className="text-[var(--color-accent)] hover:underline text-sm font-semibold transition-colors"
         >
           VIEW ALL
         </a>
@@ -52,29 +52,29 @@ export const RecentNotesRow: React.FC<RecentNotesRowProps> = ({ notes }) => {
           {notes.slice(0, 3).map((note) => (
             <div
               key={note.id}
-              className="bg-[#0f0f23] border border-white/5 rounded-lg p-6 hover:border-white/10 transition-colors cursor-pointer"
+              className="card-base card-hover p-6 cursor-pointer"
             >
               {/* Tag Badge */}
               <div className="mb-3">
                 <span
-                  className={`inline-block text-xs font-semibold px-2 py-1 rounded ${getTagColor(note.tag)}`}
+                  className={`inline-block text-[10px] font-bold px-2 py-0.5 rounded tracking-wider uppercase ${getTagColor(note.tag)}`}
                 >
                   {note.tag.toUpperCase()}
                 </span>
               </div>
 
               {/* Title */}
-              <h3 className="text-lg font-bold text-white mb-3 line-clamp-2">
+              <h3 className="text-base font-bold text-[var(--color-text-primary)] mb-3 line-clamp-2">
                 {note.title}
               </h3>
 
               {/* Content Preview */}
-              <p className="text-white/60 text-sm mb-4 line-clamp-3">
+              <p className="text-[var(--color-text-secondary)] text-sm mb-4 line-clamp-3">
                 {truncateContent(note.content)}
               </p>
 
               {/* Footer */}
-              <div className="flex items-center justify-between text-xs text-white/50">
+              <div className="flex items-center justify-between text-xs text-[var(--color-text-muted)]">
                 <span className="font-mono">
                   {note.authorName}
                 </span>
@@ -86,8 +86,8 @@ export const RecentNotesRow: React.FC<RecentNotesRowProps> = ({ notes }) => {
           ))}
         </div>
       ) : (
-        <div className="bg-[#0f0f23] border border-white/5 rounded-lg py-12 flex items-center justify-center">
-          <p className="text-white/50 text-center">No notes yet. Start documenting your session!</p>
+        <div className="card-base py-12 flex items-center justify-center">
+          <p className="text-[var(--color-text-muted)] text-center">No notes yet. Start documenting your session!</p>
         </div>
       )}
     </div>

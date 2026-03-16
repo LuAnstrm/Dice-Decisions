@@ -20,7 +20,7 @@ export function ScenarioSelector({ scenarios, selected, onSelect }: ScenarioSele
   return (
     <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
       <div className="flex items-center gap-3">
-        <div className="relative h-9 w-9 overflow-hidden rounded-xl border border-white/10 bg-white/5">
+        <div className="relative h-9 w-9 overflow-hidden rounded-xl border border-[var(--color-border)] bg-white/5">
           <Image src="/images/icons/fantasy/eye-target.png" alt="" fill className="object-contain p-2 opacity-95" />
         </div>
         <div>
@@ -43,7 +43,7 @@ export function ScenarioSelector({ scenarios, selected, onSelect }: ScenarioSele
           }
         }}
       >
-        <SelectTrigger className="w-full min-w-[260px] bg-black/25 border-white/10 text-[var(--color-text-primary)] sm:ml-auto sm:w-[340px]">
+        <SelectTrigger className="w-full min-w-[260px] bg-black/25 border-[var(--color-border)] text-[var(--color-text-primary)] sm:ml-auto sm:w-[340px]">
           <SelectValue />
         </SelectTrigger>
         <SelectContent>

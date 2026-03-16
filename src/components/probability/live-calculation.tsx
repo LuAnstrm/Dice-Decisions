@@ -45,7 +45,7 @@ function getStatBreakdown(card: ProbabilityCardData) {
       { label: 'Nat 1', value: '5%', color: 'text-red-400' },
       { label: `${failLow}-${failHigh}`, value: `${failPct}%`, color: 'text-slate-300' },
       { label: `${succLow}-${succHigh}`, value: `${succPct}%`, color: 'text-emerald-400' },
-      { label: 'Nat 20', value: '5%', color: 'text-[#7c3aed]' },
+      { label: 'Nat 20', value: '5%', color: 'text-[var(--color-accent)]' },
     ];
   }
 
@@ -61,7 +61,7 @@ function getStatBreakdown(card: ProbabilityCardData) {
 export function LiveCalculation({ card }: LiveCalculationProps) {
   if (!card) {
     return (
-      <div className="rounded-xl border border-border-default bg-[#111119] p-7 shadow-2xl">
+      <div className="rounded-xl border border-border-default bg-[var(--color-bg-elevated)] p-7 shadow-2xl">
         <p className="text-center text-slate-500 py-12">
           Configure a roll above to see probabilities
         </p>
@@ -90,14 +90,14 @@ export function LiveCalculation({ card }: LiveCalculationProps) {
   const stats = getStatBreakdown(card);
 
   return (
-    <div className="relative rounded-xl border border-border-default bg-[#111119] p-7 shadow-2xl">
+    <div className="relative rounded-xl border border-border-default bg-[var(--color-bg-elevated)] p-7 shadow-2xl">
       {/* Header row */}
       <div className="flex justify-between items-start mb-8">
         <div>
           <h3 className="font-sans text-xl font-semibold text-slate-100 mb-2">
             {card.actionName}
           </h3>
-          <div className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#7c3aed]/10 border border-[#7c3aed]/20 text-[#7c3aed] text-[10px] font-mono font-bold tracking-tighter">
+          <div className="inline-flex items-center px-2.5 py-1 rounded-full bg-[var(--color-accent)]/10 border border-[#7c3aed]/20 text-[var(--color-accent)] text-[10px] font-mono font-bold tracking-tighter">
             {formatDiceNotation(card)}
           </div>
         </div>
@@ -124,7 +124,7 @@ export function LiveCalculation({ card }: LiveCalculationProps) {
 
       {/* Probability bar */}
       <div className="mb-10">
-        <ProbabilityBar segments={segments} height={16} className="border border-white/5 rounded-full" />
+        <ProbabilityBar segments={segments} height={16} className="border border-[var(--color-border)] rounded-full" />
         {isSingleD20 && (
           <div className="flex justify-between mt-3 px-1">
             <div className="flex flex-col">
@@ -132,7 +132,7 @@ export function LiveCalculation({ card }: LiveCalculationProps) {
               <span className="font-mono text-xs text-slate-300">5%</span>
             </div>
             <div className="flex flex-col text-right">
-              <span className="text-[9px] uppercase font-bold text-[#7c3aed]">Crit Succ</span>
+              <span className="text-[9px] uppercase font-bold text-[var(--color-accent)]">Crit Succ</span>
               <span className="font-mono text-xs text-slate-300">5%</span>
             </div>
           </div>

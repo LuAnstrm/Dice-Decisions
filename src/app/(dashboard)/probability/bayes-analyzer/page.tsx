@@ -160,7 +160,7 @@ export default function BayesAnalyzerPage() {
       </div>
 
       {chainHistory.length > 0 && (
-        <div className="mt-6 rounded-[22px] border border-white/10 bg-black/20 p-4 shadow-[0_12px_32px_rgba(0,0,0,0.22)] backdrop-blur-sm">
+        <div className="mt-6 rounded-[22px] border border-[var(--color-border)] bg-black/20 p-4 shadow-[0_12px_32px_rgba(0,0,0,0.22)] backdrop-blur-sm">
           <div className="mb-3 flex items-center justify-between">
             <p className="text-[10px] font-semibold uppercase tracking-[0.1em] text-[var(--color-text-muted)] font-mono">
               Chain History

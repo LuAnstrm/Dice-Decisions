@@ -55,7 +55,7 @@ export function NPCCard({ npc, onClick, isDM = false }: NPCCardProps) {
         </p>
       )}
 
-      <div className="flex items-center justify-between gap-2 pt-2 border-t border-white/5">
+      <div className="flex items-center justify-between gap-2 pt-2 border-t border-[var(--color-border)]">
         <div className="flex gap-3 text-xs">
           {npc.hp !== null && (
             <div className="flex flex-col items-center">

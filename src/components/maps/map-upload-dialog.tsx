@@ -103,7 +103,7 @@ export function MapUploadDialog({
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && handleClose()}>
-      <DialogContent className="sm:max-w-md bg-[rgba(15,15,25,0.98)] border-white/10">
+      <DialogContent className="sm:max-w-md bg-[rgba(15,15,25,0.98)] border-[var(--color-border)]">
         <DialogHeader>
           <DialogTitle className="text-[var(--color-text-primary)] font-display">
             Upload New Map
@@ -120,7 +120,7 @@ export function MapUploadDialog({
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="e.g., Tower of Fate — Level 1"
-              className="bg-[rgba(20,20,30,0.8)] border-white/10"
+              className="bg-[rgba(20,20,30,0.8)] border-[var(--color-border)]"
               maxLength={100}
             />
           </div>
@@ -131,7 +131,7 @@ export function MapUploadDialog({
               Map Image
             </label>
             {file && previewUrl ? (
-              <div className="rounded-lg border border-white/10 bg-[rgba(20,20,30,0.5)] p-3">
+              <div className="rounded-lg border border-[var(--color-border)] bg-[rgba(20,20,30,0.5)] p-3">
                 <div className="flex items-center gap-3">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
@@ -171,7 +171,7 @@ export function MapUploadDialog({
                 className={`flex flex-col items-center justify-center h-[180px] rounded-lg border-2 border-dashed transition-colors ${
                   isDragOver
                     ? 'border-[var(--color-accent)] bg-[var(--color-accent)]/5'
-                    : 'border-white/10 bg-[rgba(20,20,30,0.3)]'
+                    : 'border-[var(--color-border)] bg-[rgba(20,20,30,0.3)]'
                 }`}
               >
                 <UploadCloud size={32} className="text-[var(--color-text-muted)] mb-2" />

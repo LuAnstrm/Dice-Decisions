@@ -4,7 +4,7 @@ export default function AuthLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="relative flex min-h-screen flex-col items-center justify-center p-4 bg-[#08080d] overflow-hidden">
+    <div className="relative flex min-h-screen flex-col items-center justify-center p-4 bg-[var(--color-surface-overlay)] overflow-hidden">
       {/* Noise texture overlay */}
       <div
         className="pointer-events-none absolute inset-0 opacity-[0.02]"

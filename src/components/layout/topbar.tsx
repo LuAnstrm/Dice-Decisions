@@ -19,7 +19,7 @@ interface TopbarProps {
 
 export function Topbar({ title, breadcrumbs, actions, hasNotifications = false }: TopbarProps) {
   return (
-    <header className="sticky top-0 z-40 h-16 flex flex-col justify-center px-6 border-b border-white/5 bg-[rgba(10,10,15,0.8)] backdrop-blur-lg">
+    <header className="sticky top-0 z-40 h-16 flex flex-col justify-center px-6 border-b border-[var(--color-border)] bg-[rgba(10,10,15,0.8)] backdrop-blur-lg">
       <div className="flex items-center justify-between">
         <div className="flex-1 min-w-0">
           <h2 className="text-xl font-bold text-[var(--color-text-primary)] font-display">
