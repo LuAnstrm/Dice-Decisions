@@ -44,9 +44,11 @@
   --color-status-info: #06b6d4;
 
   /* Font Families */
-  --font-sans: var(--font-sans);
+  --font-sans: 'Inter', system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
-  --font-display: 'Georgia', 'Cambria', 'Times New Roman', serif;
+  --font-display-fantasy: 'Almendra Display', 'Georgia', serif;
+  --font-display-western: 'Rye', 'Georgia', serif;
+  --font-display: var(--font-display-fantasy);
 
   /* Border Radius */
   --radius-card: 12px;
@@ -119,41 +121,42 @@
   --color-text-secondary: #94a3b8;
   --color-text-muted: #475569;
   --theme-backdrop-image: url('/images/themes/fantasy-backdrop.jpg');
+  --font-display: var(--font-display-fantasy);
 
-  /* shadcn overrides */
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
+  /* shadcn overrides — dark RPG theme */
+  --background: #0a0a0f;
+  --foreground: #f1f5f9;
+  --card: #12121a;
+  --card-foreground: #f1f5f9;
+  --popover: #12121a;
+  --popover-foreground: #f1f5f9;
+  --primary: #7c3aed;
+  --primary-foreground: #ffffff;
+  --secondary: #12121a;
+  --secondary-foreground: #94a3b8;
+  --muted: #12121a;
+  --muted-foreground: #475569;
+  --accent: #7c3aed;
+  --accent-foreground: #ffffff;
+  --destructive: #ef4444;
   --destructive-foreground: #ffffff;
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --chart-1: oklch(0.809 0.105 251.813);
-  --chart-2: oklch(0.623 0.214 259.815);
-  --chart-3: oklch(0.546 0.245 262.881);
-  --chart-4: oklch(0.488 0.243 264.376);
-  --chart-5: oklch(0.424 0.199 265.638);
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --border: #1e1e2e;
+  --input: #1e1e2e;
+  --ring: #7c3aed;
+  --radius: 0.5rem;
+  --chart-1: #7c3aed;
+  --chart-2: #06b6d4;
+  --chart-3: #22c55e;
+  --chart-4: #eab308;
+  --chart-5: #ef4444;
+  --sidebar: #0d0d14;
+  --sidebar-foreground: #f1f5f9;
+  --sidebar-primary: #7c3aed;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #1a1a2e;
+  --sidebar-accent-foreground: #f1f5f9;
+  --sidebar-border: #1e1e2e;
+  --sidebar-ring: #7c3aed;
 }
 
 [data-theme="fantasy"] {
@@ -170,6 +173,7 @@
   --color-text-secondary: #94a3b8;
   --color-text-muted: #475569;
   --theme-backdrop-image: url('/images/themes/fantasy-backdrop.jpg');
+  --font-display: var(--font-display-fantasy);
 }
 
 [data-theme="scifi"] {
@@ -186,6 +190,7 @@
   --color-text-secondary: #7db5d0;
   --color-text-muted: #3d6080;
   --theme-backdrop-image: url('/images/themes/scifi-backdrop.jpg');
+  --font-display: 'Orbitron', 'Georgia', serif;
 }
 
 [data-theme="western"] {
@@ -202,6 +207,7 @@
   --color-text-secondary: #b58a60;
   --color-text-muted: #6b4d35;
   --theme-backdrop-image: url('/images/themes/western-backdrop.jpg');
+  --font-display: var(--font-display-western);
 }
 
 [data-theme="eldritch"] {
@@ -218,6 +224,7 @@
   --color-text-secondary: #5aa870;
   --color-text-muted: #2d5c3a;
   --theme-backdrop-image: url('/images/themes/eldritch-backdrop.jpg');
+  --font-display: 'Cormorant Garamond', 'Georgia', serif;
 }
 
 [data-theme="steampunk"] {
@@ -234,6 +241,7 @@
   --color-text-secondary: #c4a35a;
   --color-text-muted: #7a6040;
   --theme-backdrop-image: url('/images/themes/steampunk-backdrop.jpg');
+  --font-display: var(--font-display-western);
 }
 
 /* ============================================================
@@ -286,46 +294,6 @@ body {
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--color-border-hover);
-}
-
-/* Firefox */
-* {
-  scrollbar-width: thin;
-  scrollbar-color: var(--color-border) transparent;
-}
-
-.dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.809 0.105 251.813);
-  --chart-2: oklch(0.623 0.214 259.815);
-  --chart-3: oklch(0.546 0.245 262.881);
-  --chart-4: oklch(0.488 0.243 264.376);
-  --chart-5: oklch(0.424 0.199 265.638);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
 }
 
 @layer base {
