@@ -7,14 +7,10 @@ interface MapCanvasProps {
   translateY: number;
   isDragging: boolean;
   isResetting: boolean;
-  onWheel: (e: React.WheelEvent) => void;
   onMouseDown: (e: React.MouseEvent) => void;
   onMouseMove: (e: React.MouseEvent) => void;
   onMouseUp: () => void;
   onMouseLeave: () => void;
-  onTouchStart: (e: React.TouchEvent) => void;
-  onTouchMove: (e: React.TouchEvent) => void;
-  onTouchEnd: (e: React.TouchEvent) => void;
   onImageLoad: (width: number, height: number) => void;
   containerRef: React.RefObject<HTMLDivElement | null>;
   children?: React.ReactNode;
@@ -27,14 +23,10 @@ export function MapCanvas({
   translateY,
   isDragging,
   isResetting,
-  onWheel,
   onMouseDown,
   onMouseMove,
   onMouseUp,
   onMouseLeave,
-  onTouchStart,
-  onTouchMove,
-  onTouchEnd,
   onImageLoad,
   containerRef,
   children,
@@ -45,14 +37,10 @@ export function MapCanvas({
       className={`relative w-full h-full overflow-hidden ${
         isDragging ? 'cursor-grabbing' : 'cursor-grab'
       }`}
-      onWheel={onWheel}
       onMouseDown={onMouseDown}
       onMouseMove={onMouseMove}
       onMouseUp={onMouseUp}
       onMouseLeave={onMouseLeave}
-      onTouchStart={onTouchStart}
-      onTouchMove={onTouchMove}
-      onTouchEnd={onTouchEnd}
     >
       <div
         className="will-change-transform"

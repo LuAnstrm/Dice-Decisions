@@ -16,7 +16,7 @@ interface MapViewerProps {
   onEditMarker: (marker: MapMarkerData) => void;
   onDeleteMarker: (markerId: string) => void;
   onToggleVisibility: (markerId: string, visible: boolean) => void;
-  cursorPositionRef: (pos: { x: number; y: number } | null) => void;
+  cursorPositionRef: (pos: { x: number; y: number; scale: number } | null) => void;
 }
 
 export function MapViewer({
@@ -38,14 +38,10 @@ export function MapViewer({
     isDragging,
     isResetting,
     containerRef,
-    onWheel,
     onMouseDown,
     onMouseMove: hookMouseMove,
     onMouseUp,
     onMouseLeave: hookMouseLeave,
-    onTouchStart,
-    onTouchMove,
-    onTouchEnd,
     zoomIn,
     zoomOut,
     resetView,
@@ -63,10 +59,10 @@ export function MapViewer({
           imageSize.width,
           imageSize.height,
         );
-        cursorPositionRef(coords);
+        cursorPositionRef(coords ? { ...coords, scale } : null);
       }
     },
-    [hookMouseMove, getMapCoordinates, imageSize, cursorPositionRef],
+    [hookMouseMove, getMapCoordinates, imageSize, cursorPositionRef, scale],
   );
 
   const handleMouseLeave = useCallback(() => {
@@ -110,14 +106,10 @@ export function MapViewer({
         translateY={translateY}
         isDragging={isDragging}
         isResetting={isResetting}
-        onWheel={onWheel}
         onMouseDown={onMouseDown}
         onMouseMove={handleMouseMove}
         onMouseUp={onMouseUp}
         onMouseLeave={handleMouseLeave}
-        onTouchStart={onTouchStart}
-        onTouchMove={onTouchMove}
-        onTouchEnd={onTouchEnd}
         onImageLoad={handleImageLoad}
         containerRef={containerRef}
       >

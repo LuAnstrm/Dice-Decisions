@@ -43,7 +43,7 @@ export default function MapsPage() {
   } | null>(null);
   const [editingMarker, setEditingMarker] = useState<MapMarkerData | null>(null);
 
-  const [cursorPos, setCursorPos] = useState<{ x: number; y: number } | null>(null);
+  const [cursorPos, setCursorPos] = useState<{ x: number; y: number; scale: number } | null>(null);
 
   // Fetch maps list
   const fetchMaps = useCallback(async () => {
@@ -207,7 +207,7 @@ export default function MapsPage() {
       <CoordinateBar
         x={cursorPos?.x ?? null}
         y={cursorPos?.y ?? null}
-        scale={selectedMap ? 1 : 1}
+        scale={cursorPos?.scale ?? 1}
       />
 
       {/* Map selector tabs */}

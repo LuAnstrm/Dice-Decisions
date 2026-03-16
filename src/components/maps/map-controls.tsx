@@ -14,7 +14,7 @@ const MAX_SCALE = 4.0;
 
 export function MapControls({ onZoomIn, onZoomOut, onReset, scale }: MapControlsProps) {
   return (
-    <div className="absolute bottom-4 right-4 flex flex-col gap-1 z-10">
+    <div className="absolute bottom-4 right-4 flex flex-col gap-1 z-10" onClick={(e) => e.stopPropagation()}>
       <button
         type="button"
         onClick={onZoomIn}

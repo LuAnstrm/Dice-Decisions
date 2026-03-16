@@ -36,6 +36,7 @@ export function MarkerPopup({
   return (
     <div
       className="absolute z-20"
+      onClick={(e) => e.stopPropagation()}
       style={{
         left: `${marker.pos_x * 100}%`,
         top: `${marker.pos_y * 100}%`,

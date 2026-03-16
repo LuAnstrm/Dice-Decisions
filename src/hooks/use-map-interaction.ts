@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 
 const MIN_SCALE = 0.5;
 const MAX_SCALE = 4.0;
@@ -27,12 +27,21 @@ export function useMapInteraction() {
   const initialPinchDistance = useRef(0);
   const initialPinchScale = useRef(1);
   const isPinching = useRef(false);
+  const resetTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Refs for native event handlers to access latest state without stale closures
+  const scaleRef = useRef(scale);
+  const translateXRef = useRef(translateX);
+  const translateYRef = useRef(translateY);
+  scaleRef.current = scale;
+  translateXRef.current = translateX;
+  translateYRef.current = translateY;
 
   const getContainerRect = useCallback(() => {
     return containerRef.current?.getBoundingClientRect() ?? null;
   }, []);
 
-  // Mouse handlers
+  // Mouse handlers (React synthetic events — no passive issue)
   const onMouseDown = useCallback(
     (e: React.MouseEvent) => {
       if (e.button !== 0) return;
@@ -67,58 +76,62 @@ export function useMapInteraction() {
     setIsDragging(false);
   }, []);
 
-  // Wheel handler — zoom toward cursor
-  const onWheel = useCallback(
-    (e: React.WheelEvent) => {
+  // Native wheel handler — { passive: false } allows preventDefault to block page scroll
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+
+    const handleWheel = (e: WheelEvent) => {
       e.preventDefault();
-      const rect = getContainerRect();
-      if (!rect) return;
+      const rect = el.getBoundingClientRect();
+      const s = scaleRef.current;
+      const tx = translateXRef.current;
+      const ty = translateYRef.current;
 
       const direction = e.deltaY < 0 ? 1 : -1;
-      const newScale = clamp(scale + direction * ZOOM_STEP, MIN_SCALE, MAX_SCALE);
-      if (newScale === scale) return;
+      const newScale = clamp(s + direction * ZOOM_STEP, MIN_SCALE, MAX_SCALE);
+      if (newScale === s) return;
 
       const cursorX = e.clientX - rect.left;
       const cursorY = e.clientY - rect.top;
-      const pointX = (cursorX - translateX) / scale;
-      const pointY = (cursorY - translateY) / scale;
-      const newTX = cursorX - pointX * newScale;
-      const newTY = cursorY - pointY * newScale;
+      const pointX = (cursorX - tx) / s;
+      const pointY = (cursorY - ty) / s;
 
       setScale(newScale);
-      setTranslateX(newTX);
-      setTranslateY(newTY);
-    },
-    [scale, translateX, translateY, getContainerRect],
-  );
+      setTranslateX(cursorX - pointX * newScale);
+      setTranslateY(cursorY - pointY * newScale);
+    };
 
-  // Touch handlers
-  const onTouchStart = useCallback(
-    (e: React.TouchEvent) => {
+    el.addEventListener('wheel', handleWheel, { passive: false });
+    return () => el.removeEventListener('wheel', handleWheel);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Native touch handlers — { passive: false } on touchmove allows preventDefault
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+
+    const handleTouchStart = (e: TouchEvent) => {
       const t0 = e.touches[0];
       const t1 = e.touches[1];
       if (e.touches.length === 1 && t0) {
         setIsDragging(true);
         dragStartX.current = t0.clientX;
         dragStartY.current = t0.clientY;
-        lastTranslateX.current = translateX;
-        lastTranslateY.current = translateY;
+        lastTranslateX.current = translateXRef.current;
+        lastTranslateY.current = translateYRef.current;
         dragDistance.current = 0;
       } else if (e.touches.length === 2 && t0 && t1) {
         isPinching.current = true;
-        const dist = Math.hypot(
+        initialPinchDistance.current = Math.hypot(
           t0.clientX - t1.clientX,
           t0.clientY - t1.clientY,
         );
-        initialPinchDistance.current = dist;
-        initialPinchScale.current = scale;
+        initialPinchScale.current = scaleRef.current;
       }
-    },
-    [translateX, translateY, scale],
-  );
+    };
 
-  const onTouchMove = useCallback(
-    (e: React.TouchEvent) => {
+    const handleTouchMove = (e: TouchEvent) => {
       e.preventDefault();
       const t0 = e.touches[0];
       const t1 = e.touches[1];
@@ -129,6 +142,9 @@ export function useMapInteraction() {
         setTranslateX(lastTranslateX.current + deltaX);
         setTranslateY(lastTranslateY.current + deltaY);
       } else if (e.touches.length === 2 && t0 && t1) {
+        const s = scaleRef.current;
+        const tx = translateXRef.current;
+        const ty = translateYRef.current;
         const dist = Math.hypot(
           t0.clientX - t1.clientX,
           t0.clientY - t1.clientY,
@@ -138,43 +154,42 @@ export function useMapInteraction() {
           MIN_SCALE,
           MAX_SCALE,
         );
-
-        // Center zoom between fingers
-        const rect = getContainerRect();
-        if (rect) {
-          const midX = (t0.clientX + t1.clientX) / 2 - rect.left;
-          const midY = (t0.clientY + t1.clientY) / 2 - rect.top;
-          const pointX = (midX - translateX) / scale;
-          const pointY = (midY - translateY) / scale;
-          setTranslateX(midX - pointX * newScale);
-          setTranslateY(midY - pointY * newScale);
-        }
-
+        const rect = el.getBoundingClientRect();
+        const midX = (t0.clientX + t1.clientX) / 2 - rect.left;
+        const midY = (t0.clientY + t1.clientY) / 2 - rect.top;
+        const pointX = (midX - tx) / s;
+        const pointY = (midY - ty) / s;
+        setTranslateX(midX - pointX * newScale);
+        setTranslateY(midY - pointY * newScale);
         setScale(newScale);
       }
-    },
-    [scale, translateX, translateY, getContainerRect],
-  );
+    };
 
-  const onTouchEnd = useCallback(
-    (e: React.TouchEvent) => {
+    const handleTouchEnd = (e: TouchEvent) => {
       if (e.touches.length === 0) {
         setIsDragging(false);
         isPinching.current = false;
       } else if (e.touches.length === 1) {
-        // Transition from pinch to single-finger pan
         isPinching.current = false;
         const t0 = e.touches[0];
         if (t0) {
           dragStartX.current = t0.clientX;
           dragStartY.current = t0.clientY;
         }
-        lastTranslateX.current = translateX;
-        lastTranslateY.current = translateY;
+        lastTranslateX.current = translateXRef.current;
+        lastTranslateY.current = translateYRef.current;
       }
-    },
-    [translateX, translateY],
-  );
+    };
+
+    el.addEventListener('touchstart', handleTouchStart, { passive: true });
+    el.addEventListener('touchmove', handleTouchMove, { passive: false });
+    el.addEventListener('touchend', handleTouchEnd);
+    return () => {
+      el.removeEventListener('touchstart', handleTouchStart);
+      el.removeEventListener('touchmove', handleTouchMove);
+      el.removeEventListener('touchend', handleTouchEnd);
+    };
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Zoom controls
   const zoomIn = useCallback(() => {
@@ -218,7 +233,15 @@ export function useMapInteraction() {
     setScale(1.0);
     setTranslateX(0);
     setTranslateY(0);
-    setTimeout(() => setIsResetting(false), 300);
+    if (resetTimeoutRef.current) clearTimeout(resetTimeoutRef.current);
+    resetTimeoutRef.current = setTimeout(() => setIsResetting(false), 300);
+  }, []);
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (resetTimeoutRef.current) clearTimeout(resetTimeoutRef.current);
+    };
   }, []);
 
   // Convert screen coordinates to normalized map coordinates (0-1)
@@ -248,14 +271,10 @@ export function useMapInteraction() {
     isDragging,
     isResetting,
     containerRef,
-    onWheel,
     onMouseDown,
     onMouseMove,
     onMouseUp,
     onMouseLeave,
-    onTouchStart,
-    onTouchMove,
-    onTouchEnd,
     zoomIn,
     zoomOut,
     resetView,

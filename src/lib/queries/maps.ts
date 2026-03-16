@@ -65,7 +65,7 @@ export async function createMap(
   }
 
   // Generate unique file path
-  const ext = imageFile.type.split('/')[1] === 'jpeg' ? 'jpg' : imageFile.type.split('/')[1];
+  const ext = imageFile.type.split('/')[1] === 'jpeg' ? 'jpg' : (imageFile.type.split('/')[1] ?? 'png');
   const filePath = `maps/${campaignId}/${crypto.randomUUID()}.${ext}`;
 
   // Upload to Supabase Storage
