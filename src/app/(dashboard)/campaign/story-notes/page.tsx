@@ -1,20 +1,59 @@
-'use client';
-
+import { redirect } from 'next/navigation';
+import { createClient } from '@/lib/supabase/server';
+import type { Tables } from '@/types/database';
 import { Topbar } from '@/components/layout/topbar';
 import { EmptyState } from '@/components/shared/empty-state';
 import { ScrollText } from 'lucide-react';
+import { getActiveCampaign } from '@/lib/queries/dashboard';
+import { getNotes } from '@/lib/queries/notes';
+import { StoryNotesClient } from './story-notes-client';
 
-export default function StoryNotesPage() {
+export default async function StoryNotesPage() {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    redirect('/login');
+  }
+
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('preferred_role')
+    .eq('id', user.id)
+    .single<Tables<'profiles'>>();
+
+  const isDM = profile?.preferred_role === 'dm';
+
+  const campaign = await getActiveCampaign(supabase, user.id);
+
+  if (!campaign) {
+    return (
+      <>
+        <Topbar title="Story Notes" />
+        <div className="p-6 lg:p-8">
+          <EmptyState
+            icon={ScrollText}
+            title="No Campaign"
+            description="You need to be in a campaign to manage story notes."
+          />
+        </div>
+      </>
+    );
+  }
+
+  const notes = await getNotes(supabase, campaign.id, isDM);
+
   return (
     <>
       <Topbar title="Story Notes" />
-      <div className="p-6 lg:p-8">
-        <EmptyState
-          icon={ScrollText}
-          title="No Story Notes"
-          description="Start writing session notes, world lore, and DM secrets."
-        />
-      </div>
+      <StoryNotesClient
+        initialNotes={notes}
+        isDM={isDM}
+        campaignId={campaign.id}
+        userId={user.id}
+      />
     </>
   );
 }
