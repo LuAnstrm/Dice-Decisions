@@ -247,9 +247,9 @@ class LocalQueryBuilder {
         const ilikeMatch = part.match(/^([^.]+)\.ilike\.%(.*)%$/i);
         if (ilikeMatch) {
           const [, field, term] = ilikeMatch;
-          const normalized = term.toLowerCase();
+          const normalized = String(term ?? '').toLowerCase();
           return (row: AnyRecord) =>
-            String(row[field] ?? '')
+            String(row[String(field)] ?? '')
               .toLowerCase()
               .includes(normalized);
         }
@@ -257,7 +257,9 @@ class LocalQueryBuilder {
         const eqMatch = part.match(/^([^.]+)\.eq\.(.*)$/i);
         if (eqMatch) {
           const [, field, rawValue] = eqMatch;
-          return (row: AnyRecord) => String(row[field] ?? '') === rawValue;
+          const key = String(field);
+          const expected = String(rawValue ?? '');
+          return (row: AnyRecord) => String(row[key] ?? '') === expected;
         }
 
         return null;

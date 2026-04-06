@@ -60,7 +60,7 @@ export function SaveToEncounter({ card }: SaveToEncounterProps) {
         .eq('dm_id', user.id);
 
       if (campaigns && campaigns.length > 0) {
-        const campaignIds = campaigns.map((c) => c.id);
+        const campaignIds = (campaigns as Array<{ id: string }>).map((c) => c.id);
         const { data: encounterData } = await dataClient
           .from('encounters')
           .select('id, name, created_at')

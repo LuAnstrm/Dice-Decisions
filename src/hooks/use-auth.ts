@@ -67,13 +67,14 @@ export function useAuth() {
       const { error } = await dataClient.auth.signInWithPassword({ email, password });
 
       if (error) {
-        if (error.message.includes('Invalid login credentials')) {
+        const message = String((error as { message?: string }).message ?? 'Unable to sign in');
+        if (message.includes('Invalid login credentials')) {
           return { error: 'Invalid email or password. Please try again.' };
         }
-        if (error.message.includes('Email not confirmed')) {
+        if (message.includes('Email not confirmed')) {
           return { error: 'Please verify your email before signing in.' };
         }
-        return { error: error.message };
+        return { error: message };
       }
 
       router.refresh();
@@ -95,10 +96,11 @@ export function useAuth() {
       });
 
       if (error) {
-        if (error.message.includes('User already registered')) {
+        const message = String((error as { message?: string }).message ?? 'Unable to sign up');
+        if (message.includes('User already registered')) {
           return { error: 'An account with this email already exists.' };
         }
-        return { error: error.message };
+        return { error: message };
       }
 
       router.refresh();
@@ -115,12 +117,11 @@ export function useAuth() {
 
   const resetPassword = useCallback(
     async (email: string): Promise<{ error: string | null }> => {
-      const { error } = await dataClient.auth.resetPasswordForEmail(email, {
-        redirectTo: window.location.origin + '/auth/callback',
-      });
+      const { error } = await dataClient.auth.resetPasswordForEmail(email);
 
       if (error) {
-        return { error: error.message };
+        const message = String((error as { message?: string }).message ?? 'Unable to reset password');
+        return { error: message };
       }
 
       return { error: null };
