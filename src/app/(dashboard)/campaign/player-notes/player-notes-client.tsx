@@ -1,13 +1,13 @@
 'use client';
 
 import { useState } from 'react';
-import type { Tables } from '@/types/database';
+import type { Tables } from '@/types/schema';
 import { PlayerNoteCard } from '@/components/campaign/player-note-card';
 import { PlayerNoteEditDialog } from '@/components/campaign/player-note-edit-dialog';
 import { Button } from '@/components/ui/button';
 import { EmptyState } from '@/components/shared/empty-state';
 import { BookOpen, Plus } from 'lucide-react';
-import { createClient } from '@/lib/supabase/client';
+import { createClient } from '@/lib/data-client/client';
 
 interface PlayerNotesClientContentProps {
   notes: Tables<'player_notes'>[];
@@ -38,12 +38,12 @@ export function PlayerNotesClientContent({
   };
 
   const handleSave = async (title: string, content: string) => {
-    const supabase = createClient();
+    const dataClient = createClient();
 
     try {
       if (isCreating) {
         // Create new note
-        const { data, error } = await supabase
+        const { data, error } = await dataClient
           .from('player_notes')
           // @ts-ignore - player_notes table type not yet recognized
           .insert({
@@ -61,7 +61,7 @@ export function PlayerNotesClientContent({
         }
       } else if (selectedNote) {
         // Update existing note
-        const { data, error } = await supabase
+        const { data, error } = await dataClient
           .from('player_notes')
           // @ts-ignore - player_notes table type not yet recognized
           .update({
@@ -86,10 +86,10 @@ export function PlayerNotesClientContent({
   };
 
   const handleDelete = async (noteId: string) => {
-    const supabase = createClient();
+    const dataClient = createClient();
 
     try {
-      const { error } = await supabase
+      const { error } = await dataClient
         .from('player_notes')
         // @ts-ignore - player_notes table type not yet recognized
         .delete()

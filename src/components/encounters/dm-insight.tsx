@@ -1,6 +1,6 @@
 'use client';
 
-import type { Tables } from '@/types/database';
+import type { Tables } from '@/types/schema';
 import type { EncounterFormData, EnemyEntry } from '@/lib/validations/encounter';
 import {
   calcHitProbability,

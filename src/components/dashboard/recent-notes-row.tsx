@@ -27,9 +27,14 @@ const getTagColor = (tag: string): string => {
   return colorMap[tag.toLowerCase()] || 'bg-white/10 text-white/70';
 };
 
+const stripHtml = (html: string): string => {
+  return html.replace(/<[^>]*>/g, '').trim();
+};
+
 const truncateContent = (content: string, maxLength: number = 120): string => {
-  if (content.length <= maxLength) return content;
-  return content.substring(0, maxLength) + '...';
+  const text = stripHtml(content);
+  if (text.length <= maxLength) return text;
+  return text.substring(0, maxLength) + '...';
 };
 
 export const RecentNotesRow: React.FC<RecentNotesRowProps> = ({ notes }) => {

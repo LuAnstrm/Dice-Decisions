@@ -1,6 +1,6 @@
-import type { Enums } from '@/types/database';
+import type { Enums } from '@/types/schema';
 
-// Re-export the database enum for convenience
+// Re-export the AppSchema enum for convenience
 export type MarkerIconType = Enums<'marker_icon_type'>;
 
 export const MARKER_CONFIG: Record<

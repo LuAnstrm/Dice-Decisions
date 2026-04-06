@@ -2,11 +2,11 @@
 
 import { useState, useMemo, useRef, useCallback } from 'react';
 import { Plus, Search, Trash2 } from 'lucide-react';
-import { createClient } from '@/lib/supabase/client';
+import { createClient } from '@/lib/data-client/client';
 import { createNote, deleteNote } from '@/lib/queries/notes';
 import { NoteCard } from '@/components/notes/note-card';
 import { NoteFilters } from '@/components/notes/note-filters';
-import type { Tables } from '@/types/database';
+import type { Tables } from '@/types/schema';
 
 interface NotesListPanelProps {
   notes: Tables<'notes'>[];
@@ -62,8 +62,8 @@ export function NotesListPanel({
   const handleCreate = async () => {
     setCreating(true);
     try {
-      const supabase = createClient();
-      const newNote = await createNote(supabase, campaignId, userId);
+      const dataClient = createClient();
+      const newNote = await createNote(dataClient, campaignId, userId);
       if (newNote) {
         onNoteCreate(newNote);
       }
@@ -74,8 +74,8 @@ export function NotesListPanel({
 
   const handleDelete = async (e: React.MouseEvent, id: string) => {
     e.stopPropagation();
-    const supabase = createClient();
-    const success = await deleteNote(supabase, id);
+    const dataClient = createClient();
+    const success = await deleteNote(dataClient, id);
     if (success) {
       onNoteDelete(id);
     }

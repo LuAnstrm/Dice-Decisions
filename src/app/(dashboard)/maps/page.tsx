@@ -22,13 +22,13 @@ import {
 } from '@/lib/queries/maps';
 import { useRole } from '@/hooks/use-role';
 import { useCampaign } from '@/hooks/use-campaign';
-import { createClient } from '@/lib/supabase/client';
+import { createClient } from '@/lib/data-client/client';
 import type { MapData, MapMarkerData, MarkerIconType } from '@/types/maps';
 
 export default function MapsPage() {
   const { isDM } = useRole();
   const { campaign } = useCampaign();
-  const supabase = createClient();
+  const dataClient = createClient();
 
   const [maps, setMaps] = useState<MapData[]>([]);
   const [selectedMapId, setSelectedMapId] = useState<string | null>(null);
@@ -56,7 +56,7 @@ export default function MapsPage() {
     }
     try {
       setIsLoading(true);
-      const data = await getMaps(supabase, campaign.id);
+      const data = await getMaps(dataClient, campaign.id);
       setMaps(data);
       const firstMap = data[0];
       if (firstMap && !selectedMapId) {
@@ -67,7 +67,7 @@ export default function MapsPage() {
     } finally {
       setIsLoading(false);
     }
-  }, [campaign, supabase, selectedMapId]);
+  }, [campaign, dataClient, selectedMapId]);
 
   // Fetch selected map with markers
   const fetchSelectedMap = useCallback(async () => {
@@ -76,12 +76,12 @@ export default function MapsPage() {
       return;
     }
     try {
-      const data = await getMapWithMarkers(supabase, selectedMapId, isDM);
+      const data = await getMapWithMarkers(dataClient, selectedMapId, isDM);
       setSelectedMap(data);
     } catch (err) {
       console.error('Failed to load map:', err);
     }
-  }, [selectedMapId, isDM, supabase]);
+  }, [selectedMapId, isDM, dataClient]);
 
   useEffect(() => {
     fetchMaps();
@@ -119,7 +119,7 @@ export default function MapsPage() {
   const handleDeleteMarker = useCallback(
     async (markerId: string) => {
       try {
-        await deleteMarker(supabase, markerId);
+        await deleteMarker(dataClient, markerId);
         setSelectedMap((prev) =>
           prev
             ? { ...prev, markers: prev.markers.filter((m) => m.id !== markerId) }
@@ -129,13 +129,13 @@ export default function MapsPage() {
         console.error('Failed to delete marker:', err);
       }
     },
-    [supabase],
+    [dataClient],
   );
 
   const handleToggleVisibility = useCallback(
     async (markerId: string, visible: boolean) => {
       try {
-        await toggleMarkerVisibility(supabase, markerId, visible);
+        await toggleMarkerVisibility(dataClient, markerId, visible);
         setSelectedMap((prev) =>
           prev
             ? {
@@ -150,7 +150,7 @@ export default function MapsPage() {
         console.error('Failed to toggle visibility:', err);
       }
     },
-    [supabase],
+    [dataClient],
   );
 
   const handleMarkerSaved = useCallback(
@@ -173,7 +173,7 @@ export default function MapsPage() {
   const handleDeleteMap = useCallback(
     async (mapId: string) => {
       try {
-        await deleteMap(supabase, mapId);
+        await deleteMap(dataClient, mapId);
         setMaps((prev) => prev.filter((m) => m.id !== mapId));
         if (selectedMapId === mapId) {
           const remaining = maps.filter((m) => m.id !== mapId);
@@ -184,7 +184,7 @@ export default function MapsPage() {
         console.error('Failed to delete map:', err);
       }
     },
-    [supabase, selectedMapId, maps],
+    [dataClient, selectedMapId, maps],
   );
 
   // Campaign name for topbar
@@ -265,7 +265,7 @@ export default function MapsPage() {
           onClose={() => setIsUploadOpen(false)}
           campaignId={campaign.id}
           onMapCreated={handleMapCreated}
-          onUpload={async (name, file) => createMap(supabase, campaign.id, name, file)}
+          onUpload={async (name, file) => createMap(dataClient, campaign.id, name, file)}
         />
       )}
 
@@ -282,8 +282,8 @@ export default function MapsPage() {
           position={pendingMarkerPosition}
           existingMarker={editingMarker}
           onMarkerSaved={handleMarkerSaved}
-          onSave={async (data) => createMarker(supabase, data)}
-          onUpdate={async (id, data) => updateMarker(supabase, id, data)}
+          onSave={async (data) => createMarker(dataClient, data)}
+          onUpdate={async (id, data) => updateMarker(dataClient, id, data)}
         />
       )}
     </div>

@@ -2,7 +2,7 @@ import { CharacterBanner } from './character-banner';
 import { InspirationBadge } from './inspiration-badge';
 import { CampaignFeed } from './campaign-feed';
 import { ProbabilityCheckWidget } from './probability-check-widget';
-import type { Tables } from '@/types/database';
+import type { Tables } from '@/types/schema';
 
 interface FeedItem {
   id: string;

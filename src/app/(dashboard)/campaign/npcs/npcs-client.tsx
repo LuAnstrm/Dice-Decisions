@@ -2,8 +2,8 @@
 
 import { useState, useCallback, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
-import type { Tables } from '@/types/database';
-import { createClient } from '@/lib/supabase/client';
+import type { Tables } from '@/types/schema';
+import { createClient } from '@/lib/data-client/client';
 import { deleteNPC, toggleNPCVisibility, getNPCs } from '@/lib/queries/npcs';
 import { NpcFilters } from '@/components/npcs/npc-filters';
 import { NpcGrid } from '@/components/npcs/npc-grid';
@@ -37,8 +37,8 @@ export function NPCsClientContent({
   const [dialogOpen, setDialogOpen] = useState(false);
 
   const refreshNpcs = useCallback(async () => {
-    const supabase = createClient();
-    const fresh = await getNPCs(supabase, campaignId, isDM);
+    const dataClient = createClient();
+    const fresh = await getNPCs(dataClient, campaignId, isDM);
     setNpcs(fresh);
   }, [campaignId, isDM]);
 
@@ -80,8 +80,8 @@ export function NPCsClientContent({
 
   const handleDelete = useCallback(
     async (id: string) => {
-      const supabase = createClient();
-      const result = await deleteNPC(supabase, id);
+      const dataClient = createClient();
+      const result = await deleteNPC(dataClient, id);
 
       if (result.error === 'NPC_IN_ENCOUNTER') {
         toast.error(
@@ -107,8 +107,8 @@ export function NPCsClientContent({
         ),
       );
 
-      const supabase = createClient();
-      const result = await toggleNPCVisibility(supabase, id, visible);
+      const dataClient = createClient();
+      const result = await toggleNPCVisibility(dataClient, id, visible);
       if (!result) {
         // Revert on failure
         setNpcs((prev) =>

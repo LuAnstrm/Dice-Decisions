@@ -1,7 +1,7 @@
-import type { Database, Tables } from '@/types/database';
+import type { AppSchema, Tables } from '@/types/schema';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-type SupabaseClient = any;
+type DataClient = any;
 
 interface NPCFilters {
   roles?: string[];
@@ -10,13 +10,13 @@ interface NPCFilters {
 }
 
 export async function getNPCs(
-  supabase: SupabaseClient,
+  dataClient: DataClient,
   campaignId: string,
   isDM: boolean,
   filters?: NPCFilters,
 ): Promise<Tables<'npcs'>[]> {
   try {
-    let query = supabase
+    let query = dataClient
       .from('npcs')
       .select('*')
       .eq('campaign_id', campaignId)
@@ -52,11 +52,11 @@ export async function getNPCs(
 }
 
 export async function createNPC(
-  supabase: SupabaseClient,
-  data: Database['public']['Tables']['npcs']['Insert'],
+  dataClient: DataClient,
+  data: AppSchema['public']['Tables']['npcs']['Insert'],
 ): Promise<Tables<'npcs'> | null> {
   try {
-    const { data: npc, error } = await supabase
+    const { data: npc, error } = await dataClient
       .from('npcs')
       .insert(data)
       .select()
@@ -71,12 +71,12 @@ export async function createNPC(
 }
 
 export async function updateNPC(
-  supabase: SupabaseClient,
+  dataClient: DataClient,
   id: string,
-  data: Database['public']['Tables']['npcs']['Update'],
+  data: AppSchema['public']['Tables']['npcs']['Update'],
 ): Promise<Tables<'npcs'> | null> {
   try {
-    const { data: npc, error } = await supabase
+    const { data: npc, error } = await dataClient
       .from('npcs')
       .update(data)
       .eq('id', id)
@@ -98,12 +98,12 @@ interface DeleteResult {
 }
 
 export async function deleteNPC(
-  supabase: SupabaseClient,
+  dataClient: DataClient,
   id: string,
 ): Promise<DeleteResult> {
   try {
     // Get the NPC name first
-    const { data: npc, error: npcError } = await supabase
+    const { data: npc, error: npcError } = await dataClient
       .from('npcs')
       .select('name')
       .eq('id', id)
@@ -112,7 +112,7 @@ export async function deleteNPC(
     if (npcError) throw npcError;
 
     // Check if NPC is referenced in any encounter's enemies JSON
-    const { data: encounters, error: encError } = await supabase
+    const { data: encounters, error: encError } = await dataClient
       .from('encounters')
       .select('name, enemies');
 
@@ -136,7 +136,7 @@ export async function deleteNPC(
       }
     }
 
-    const { error: deleteError } = await supabase
+    const { error: deleteError } = await dataClient
       .from('npcs')
       .delete()
       .eq('id', id);
@@ -150,12 +150,12 @@ export async function deleteNPC(
 }
 
 export async function toggleNPCVisibility(
-  supabase: SupabaseClient,
+  dataClient: DataClient,
   id: string,
   isVisible: boolean,
 ): Promise<Tables<'npcs'> | null> {
   try {
-    const { data: npc, error } = await supabase
+    const { data: npc, error } = await dataClient
       .from('npcs')
       .update({ is_visible_to_players: isVisible })
       .eq('id', id)

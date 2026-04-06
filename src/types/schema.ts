@@ -1,8 +1,7 @@
 // =============================================================
-// Database Types for Supabase
+// AppSchema Types
 // =============================================================
-// Manually written to match 001_initial_schema.sql.
-// Regenerate with: npx supabase gen types typescript --project-id [id] > src/types/database.ts
+// Preserved as local type contracts after removing external persistence.
 
 export type Json =
   | string
@@ -12,7 +11,7 @@ export type Json =
   | { [key: string]: Json | undefined }
   | Json[];
 
-export interface Database {
+export interface AppSchema {
   public: {
     Tables: {
       profiles: {
@@ -20,8 +19,8 @@ export interface Database {
           id: string;
           email: string;
           display_name: string;
-          preferred_role: Database['public']['Enums']['user_role'];
-          selected_theme: Database['public']['Enums']['theme_id'];
+          preferred_role: AppSchema['public']['Enums']['user_role'];
+          selected_theme: AppSchema['public']['Enums']['theme_id'];
           avatar_url: string | null;
           created_at: string;
           updated_at: string;
@@ -30,8 +29,8 @@ export interface Database {
           id: string;
           email: string;
           display_name?: string;
-          preferred_role?: Database['public']['Enums']['user_role'];
-          selected_theme?: Database['public']['Enums']['theme_id'];
+          preferred_role?: AppSchema['public']['Enums']['user_role'];
+          selected_theme?: AppSchema['public']['Enums']['theme_id'];
           avatar_url?: string | null;
           created_at?: string;
           updated_at?: string;
@@ -40,8 +39,8 @@ export interface Database {
           id?: string;
           email?: string;
           display_name?: string;
-          preferred_role?: Database['public']['Enums']['user_role'];
-          selected_theme?: Database['public']['Enums']['theme_id'];
+          preferred_role?: AppSchema['public']['Enums']['user_role'];
+          selected_theme?: AppSchema['public']['Enums']['theme_id'];
           avatar_url?: string | null;
           created_at?: string;
           updated_at?: string;
@@ -54,7 +53,7 @@ export interface Database {
           description: string | null;
           dm_user_id: string;
           is_template: boolean;
-          status: Database['public']['Enums']['campaign_status'];
+          status: AppSchema['public']['Enums']['campaign_status'];
           created_at: string;
           updated_at: string;
         };
@@ -64,7 +63,7 @@ export interface Database {
           description?: string | null;
           dm_user_id: string;
           is_template?: boolean;
-          status?: Database['public']['Enums']['campaign_status'];
+          status?: AppSchema['public']['Enums']['campaign_status'];
           created_at?: string;
           updated_at?: string;
         };
@@ -74,7 +73,7 @@ export interface Database {
           description?: string | null;
           dm_user_id?: string;
           is_template?: boolean;
-          status?: Database['public']['Enums']['campaign_status'];
+          status?: AppSchema['public']['Enums']['campaign_status'];
           created_at?: string;
           updated_at?: string;
         };
@@ -165,7 +164,7 @@ export interface Database {
           armor_class: number | null;
           attack_bonus: number | null;
           notes: string | null;
-          status: Database['public']['Enums']['npc_status'];
+          status: AppSchema['public']['Enums']['npc_status'];
           is_visible_to_players: boolean;
           created_at: string;
         };
@@ -180,7 +179,7 @@ export interface Database {
           armor_class?: number | null;
           attack_bonus?: number | null;
           notes?: string | null;
-          status?: Database['public']['Enums']['npc_status'];
+          status?: AppSchema['public']['Enums']['npc_status'];
           is_visible_to_players?: boolean;
           created_at?: string;
         };
@@ -195,7 +194,7 @@ export interface Database {
           armor_class?: number | null;
           attack_bonus?: number | null;
           notes?: string | null;
-          status?: Database['public']['Enums']['npc_status'];
+          status?: AppSchema['public']['Enums']['npc_status'];
           is_visible_to_players?: boolean;
           created_at?: string;
         };
@@ -208,7 +207,7 @@ export interface Database {
           description: string | null;
           difficulty_class: number | null;
           enemies: Json;
-          status: Database['public']['Enums']['encounter_status'];
+          status: AppSchema['public']['Enums']['encounter_status'];
           created_at: string;
         };
         Insert: {
@@ -218,7 +217,7 @@ export interface Database {
           description?: string | null;
           difficulty_class?: number | null;
           enemies?: Json;
-          status?: Database['public']['Enums']['encounter_status'];
+          status?: AppSchema['public']['Enums']['encounter_status'];
           created_at?: string;
         };
         Update: {
@@ -228,7 +227,7 @@ export interface Database {
           description?: string | null;
           difficulty_class?: number | null;
           enemies?: Json;
-          status?: Database['public']['Enums']['encounter_status'];
+          status?: AppSchema['public']['Enums']['encounter_status'];
           created_at?: string;
         };
       };
@@ -239,7 +238,7 @@ export interface Database {
           author_id: string;
           title: string;
           content: string | null;
-          tag: Database['public']['Enums']['note_tag'];
+          tag: AppSchema['public']['Enums']['note_tag'];
           is_visible_to_players: boolean;
           session_number: number | null;
           created_at: string;
@@ -250,7 +249,7 @@ export interface Database {
           author_id: string;
           title: string;
           content?: string | null;
-          tag: Database['public']['Enums']['note_tag'];
+          tag: AppSchema['public']['Enums']['note_tag'];
           is_visible_to_players?: boolean;
           session_number?: number | null;
           created_at?: string;
@@ -261,7 +260,7 @@ export interface Database {
           author_id?: string;
           title?: string;
           content?: string | null;
-          tag?: Database['public']['Enums']['note_tag'];
+          tag?: AppSchema['public']['Enums']['note_tag'];
           is_visible_to_players?: boolean;
           session_number?: number | null;
           created_at?: string;
@@ -363,7 +362,7 @@ export interface Database {
           map_id: string;
           label: string;
           description: string | null;
-          icon_type: Database['public']['Enums']['marker_icon_type'];
+          icon_type: AppSchema['public']['Enums']['marker_icon_type'];
           pos_x: number;
           pos_y: number;
           is_visible_to_players: boolean;
@@ -374,7 +373,7 @@ export interface Database {
           map_id: string;
           label: string;
           description?: string | null;
-          icon_type: Database['public']['Enums']['marker_icon_type'];
+          icon_type: AppSchema['public']['Enums']['marker_icon_type'];
           pos_x: number;
           pos_y: number;
           is_visible_to_players?: boolean;
@@ -385,7 +384,7 @@ export interface Database {
           map_id?: string;
           label?: string;
           description?: string | null;
-          icon_type?: Database['public']['Enums']['marker_icon_type'];
+          icon_type?: AppSchema['public']['Enums']['marker_icon_type'];
           pos_x?: number;
           pos_y?: number;
           is_visible_to_players?: boolean;
@@ -406,10 +405,10 @@ export interface Database {
 }
 
 // Type helpers
-export type Tables<T extends keyof Database['public']['Tables']> =
-  Database['public']['Tables'][T]['Row'];
-export type Enums<T extends keyof Database['public']['Enums']> =
-  Database['public']['Enums'][T];
+export type Tables<T extends keyof AppSchema['public']['Tables']> =
+  AppSchema['public']['Tables'][T]['Row'];
+export type Enums<T extends keyof AppSchema['public']['Enums']> =
+  AppSchema['public']['Enums'][T];
 
 // Convenience aliases
 export type Profile = Tables<'profiles'>;

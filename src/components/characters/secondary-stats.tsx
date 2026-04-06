@@ -1,4 +1,4 @@
-import type { Tables } from '@/types/database';
+import type { Tables } from '@/types/schema';
 import { RpgCard } from '@/components/shared/rpg-card';
 import { Shield, Zap, Footprints } from 'lucide-react';
 

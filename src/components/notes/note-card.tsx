@@ -2,7 +2,7 @@
 
 import { Lock } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import type { Tables } from '@/types/database';
+import type { Tables } from '@/types/schema';
 
 function relativeTime(dateStr: string): string {
   const diff = Date.now() - new Date(dateStr).getTime();

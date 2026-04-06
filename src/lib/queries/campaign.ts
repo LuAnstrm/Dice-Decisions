@@ -1,17 +1,18 @@
-import { createServerClient } from '@supabase/ssr';
-import type { Database, Tables } from '@/types/database';
+import type { Tables } from '@/types/schema';
+
+type DataClient = any;
 
 /**
  * Get all NPCs for a campaign.
  * Filters by is_visible_to_players for non-DM users (optional parameter).
  */
 export async function getCampaignNPCs(
-  supabase: ReturnType<typeof createServerClient>,
+  dataClient: DataClient,
   campaignId: string,
   isDM: boolean = true
 ): Promise<Tables<'npcs'>[]> {
   try {
-    let query = supabase
+    let query = dataClient
       .from('npcs')
       .select('*')
       .eq('campaign_id', campaignId)
@@ -36,11 +37,11 @@ export async function getCampaignNPCs(
  * Get a single NPC by ID.
  */
 export async function getNPCById(
-  supabase: ReturnType<typeof createServerClient>,
+  dataClient: DataClient,
   npcId: string
 ): Promise<Tables<'npcs'> | null> {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await dataClient
       .from('npcs')
       .select('*')
       .eq('id', npcId)
@@ -58,12 +59,12 @@ export async function getNPCById(
  * Get all player notes for the current user in a campaign.
  */
 export async function getPlayerNotes(
-  supabase: ReturnType<typeof createServerClient>,
+  dataClient: DataClient,
   campaignId: string,
   userId: string
 ): Promise<Tables<'player_notes'>[]> {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await dataClient
       .from('player_notes')
       .select('*')
       .eq('campaign_id', campaignId)
@@ -82,11 +83,11 @@ export async function getPlayerNotes(
  * Get a single player note by ID.
  */
 export async function getPlayerNoteById(
-  supabase: ReturnType<typeof createServerClient>,
+  dataClient: DataClient,
   noteId: string
 ): Promise<Tables<'player_notes'> | null> {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await dataClient
       .from('player_notes')
       .select('*')
       .eq('id', noteId)

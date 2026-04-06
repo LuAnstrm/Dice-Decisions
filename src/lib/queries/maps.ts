@@ -2,13 +2,13 @@ import type { MapData, MapMarkerData, MarkerFormData } from '@/types/maps';
 import { ACCEPTED_IMAGE_TYPES, MAX_MAP_FILE_SIZE } from '@/lib/validations/maps';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-type SupabaseClient = any;
+type DataClient = any;
 
 export async function getMaps(
-  supabase: SupabaseClient,
+  dataClient: DataClient,
   campaignId: string,
 ): Promise<MapData[]> {
-  const { data, error } = await supabase
+  const { data, error } = await dataClient
     .from('campaign_maps')
     .select('*')
     .eq('campaign_id', campaignId)
@@ -19,11 +19,11 @@ export async function getMaps(
 }
 
 export async function getMapWithMarkers(
-  supabase: SupabaseClient,
+  dataClient: DataClient,
   mapId: string,
   isDM: boolean,
 ): Promise<MapData> {
-  const { data: map, error: mapError } = await supabase
+  const { data: map, error: mapError } = await dataClient
     .from('campaign_maps')
     .select('*')
     .eq('id', mapId)
@@ -31,7 +31,7 @@ export async function getMapWithMarkers(
 
   if (mapError) throw new Error('Map not found');
 
-  let markersQuery = supabase
+  let markersQuery = dataClient
     .from('map_markers')
     .select('*')
     .eq('map_id', mapId)
@@ -48,7 +48,7 @@ export async function getMapWithMarkers(
 }
 
 export async function createMap(
-  supabase: SupabaseClient,
+  dataClient: DataClient,
   campaignId: string,
   name: string,
   imageFile: File,
@@ -68,19 +68,19 @@ export async function createMap(
   const ext = imageFile.type.split('/')[1] === 'jpeg' ? 'jpg' : (imageFile.type.split('/')[1] ?? 'png');
   const filePath = `maps/${campaignId}/${crypto.randomUUID()}.${ext}`;
 
-  // Upload to Supabase Storage
-  const { error: uploadError } = await supabase.storage
+  // Upload to dataClient Storage
+  const { error: uploadError } = await dataClient.storage
     .from('maps')
     .upload(filePath, imageFile);
 
   if (uploadError) throw new Error(`Upload failed: ${uploadError.message}`);
 
   // Get public URL
-  const { data: urlData } = supabase.storage.from('maps').getPublicUrl(filePath);
+  const { data: urlData } = dataClient.storage.from('maps').getPublicUrl(filePath);
   const imageUrl = urlData.publicUrl;
 
   // Determine sort order
-  const { count } = await supabase
+  const { count } = await dataClient
     .from('campaign_maps')
     .select('*', { count: 'exact', head: true })
     .eq('campaign_id', campaignId);
@@ -88,7 +88,7 @@ export async function createMap(
   const sortOrder = (count ?? 0) + 1;
 
   // Insert map record
-  const { data: map, error: insertError } = await supabase
+  const { data: map, error: insertError } = await dataClient
     .from('campaign_maps')
     .insert({
       campaign_id: campaignId,
@@ -104,11 +104,11 @@ export async function createMap(
 }
 
 export async function updateMap(
-  supabase: SupabaseClient,
+  dataClient: DataClient,
   mapId: string,
   data: { name?: string; sort_order?: number },
 ): Promise<MapData> {
-  const { data: map, error } = await supabase
+  const { data: map, error } = await dataClient
     .from('campaign_maps')
     .update(data)
     .eq('id', mapId)
@@ -120,11 +120,11 @@ export async function updateMap(
 }
 
 export async function deleteMap(
-  supabase: SupabaseClient,
+  dataClient: DataClient,
   mapId: string,
 ): Promise<void> {
   // Get map to extract storage path
-  const { data: map, error: fetchError } = await supabase
+  const { data: map, error: fetchError } = await dataClient
     .from('campaign_maps')
     .select('image_url')
     .eq('id', mapId)
@@ -138,7 +138,7 @@ export async function deleteMap(
   const storagePath = pathParts[1];
 
   if (storagePath) {
-    const { error: storageError } = await supabase.storage
+    const { error: storageError } = await dataClient.storage
       .from('maps')
       .remove([storagePath]);
 
@@ -148,8 +148,8 @@ export async function deleteMap(
   }
 
   // Delete markers first, then map
-  await supabase.from('map_markers').delete().eq('map_id', mapId);
-  const { error: deleteError } = await supabase
+  await dataClient.from('map_markers').delete().eq('map_id', mapId);
+  const { error: deleteError } = await dataClient
     .from('campaign_maps')
     .delete()
     .eq('id', mapId);
@@ -158,10 +158,10 @@ export async function deleteMap(
 }
 
 export async function createMarker(
-  supabase: SupabaseClient,
+  dataClient: DataClient,
   data: MarkerFormData & { map_id: string },
 ): Promise<MapMarkerData> {
-  const { data: marker, error } = await supabase
+  const { data: marker, error } = await dataClient
     .from('map_markers')
     .insert(data)
     .select()
@@ -172,11 +172,11 @@ export async function createMarker(
 }
 
 export async function updateMarker(
-  supabase: SupabaseClient,
+  dataClient: DataClient,
   markerId: string,
   data: Partial<MarkerFormData>,
 ): Promise<MapMarkerData> {
-  const { data: marker, error } = await supabase
+  const { data: marker, error } = await dataClient
     .from('map_markers')
     .update(data)
     .eq('id', markerId)
@@ -188,10 +188,10 @@ export async function updateMarker(
 }
 
 export async function deleteMarker(
-  supabase: SupabaseClient,
+  dataClient: DataClient,
   markerId: string,
 ): Promise<void> {
-  const { error } = await supabase
+  const { error } = await dataClient
     .from('map_markers')
     .delete()
     .eq('id', markerId);
@@ -200,11 +200,11 @@ export async function deleteMarker(
 }
 
 export async function toggleMarkerVisibility(
-  supabase: SupabaseClient,
+  dataClient: DataClient,
   markerId: string,
   visible: boolean,
 ): Promise<void> {
-  const { error } = await supabase
+  const { error } = await dataClient
     .from('map_markers')
     .update({ is_visible_to_players: visible })
     .eq('id', markerId);

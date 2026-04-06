@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useCallback } from 'react';
-import type { Tables } from '@/types/database';
+import type { Tables } from '@/types/schema';
 import type { EncounterFormData } from '@/lib/validations/encounter';
 import { EncounterForm } from '@/components/encounters/encounter-form';
 import { ProbabilityStream } from '@/components/encounters/probability-stream';

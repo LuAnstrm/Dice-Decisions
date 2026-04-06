@@ -13,7 +13,7 @@ import {
   DialogDescription,
 } from '@/components/ui/dialog';
 import type { ProbabilityCardData } from '@/types/probability';
-import { createBrowserClient } from '@supabase/ssr';
+import { createClient } from '@/lib/data-client/client';
 
 interface SaveToEncounterProps {
   card: ProbabilityCardData | null;
@@ -38,17 +38,14 @@ export function SaveToEncounter({ card }: SaveToEncounterProps) {
   useEffect(() => {
     if (!open) return;
 
-    const supabase = createBrowserClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    );
+    const dataClient = createClient();
 
     async function loadEncounters() {
       setLoading(true);
       setSaved(false);
       setSelectedId(null);
 
-      const { data: { user } } = await supabase.auth.getUser();
+      const { data: { user } } = await dataClient.auth.getUser();
       if (!user) {
         setIsLoggedIn(false);
         setLoading(false);
@@ -57,14 +54,14 @@ export function SaveToEncounter({ card }: SaveToEncounterProps) {
       setIsLoggedIn(true);
 
       // Get campaigns owned by this user, then their encounters
-      const { data: campaigns } = await supabase
+      const { data: campaigns } = await dataClient
         .from('campaigns')
         .select('id')
         .eq('dm_id', user.id);
 
       if (campaigns && campaigns.length > 0) {
         const campaignIds = campaigns.map((c) => c.id);
-        const { data: encounterData } = await supabase
+        const { data: encounterData } = await dataClient
           .from('encounters')
           .select('id, name, created_at')
           .in('campaign_id', campaignIds)

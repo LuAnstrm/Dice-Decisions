@@ -1,7 +1,7 @@
 'use client';
 
 import { createContext, useContext, useState, type ReactNode } from 'react';
-import { createClient } from '@/lib/supabase/client';
+import { createClient } from '@/lib/data-client/client';
 import { useAuth } from '@/hooks/use-auth';
 import type { Role } from '@/types';
 
@@ -24,17 +24,17 @@ export function RoleProvider({
   const [role, setRoleState] = useState<Role>(initialRole);
   const { user } = useAuth();
 
-  // Sync role to database when changed with proper error handling
+  // Sync role to AppSchema when changed with proper error handling
   const setRole = (r: Role) => {
     // Always update local state first (optimistic update)
     setRoleState(r);
 
-    // Sync to database in background
+    // Sync to AppSchema in background
     if (user) {
-      const supabase = createClient() as any;
+      const dataClient = createClient() as any;
       (async () => {
         try {
-          const { error } = await supabase
+          const { error } = await dataClient
             .from('profiles')
             .update({ preferred_role: r })
             .eq('id', user.id);

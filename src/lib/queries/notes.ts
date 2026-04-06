@@ -1,16 +1,16 @@
-import type { Database, Tables } from '@/types/database';
+import type { AppSchema, Tables } from '@/types/schema';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-type SupabaseClient = any;
+type DataClient = any;
 
 export async function getNotes(
-  supabase: SupabaseClient,
+  dataClient: DataClient,
   campaignId: string,
   isDM: boolean,
   filters?: { tag?: string; search?: string },
 ): Promise<Tables<'notes'>[]> {
   try {
-    let query = supabase
+    let query = dataClient
       .from('notes')
       .select('*')
       .eq('campaign_id', campaignId)
@@ -40,11 +40,11 @@ export async function getNotes(
 }
 
 export async function getNote(
-  supabase: SupabaseClient,
+  dataClient: DataClient,
   id: string,
 ): Promise<Tables<'notes'> | null> {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await dataClient
       .from('notes')
       .select('*')
       .eq('id', id)
@@ -62,19 +62,19 @@ export async function getNote(
 }
 
 export async function createNote(
-  supabase: SupabaseClient,
+  dataClient: DataClient,
   campaignId: string,
   userId: string,
 ): Promise<Tables<'notes'> | null> {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await dataClient
       .from('notes')
       .insert({
         campaign_id: campaignId,
         author_id: userId,
         title: 'New Note',
         content: '',
-        tag: 'session_log' as Database['public']['Enums']['note_tag'],
+        tag: 'session_log' as AppSchema['public']['Enums']['note_tag'],
         is_visible_to_players: true,
       })
       .select()
@@ -89,12 +89,12 @@ export async function createNote(
 }
 
 export async function updateNote(
-  supabase: SupabaseClient,
+  dataClient: DataClient,
   id: string,
-  data: Database['public']['Tables']['notes']['Update'],
+  data: AppSchema['public']['Tables']['notes']['Update'],
 ): Promise<Tables<'notes'> | null> {
   try {
-    const { data: note, error } = await supabase
+    const { data: note, error } = await dataClient
       .from('notes')
       .update(data)
       .eq('id', id)
@@ -110,11 +110,11 @@ export async function updateNote(
 }
 
 export async function deleteNote(
-  supabase: SupabaseClient,
+  dataClient: DataClient,
   id: string,
 ): Promise<boolean> {
   try {
-    const { error } = await supabase.from('notes').delete().eq('id', id);
+    const { error } = await dataClient.from('notes').delete().eq('id', id);
     if (error) throw error;
     return true;
   } catch (error) {
@@ -124,12 +124,12 @@ export async function deleteNote(
 }
 
 export async function searchNotes(
-  supabase: SupabaseClient,
+  dataClient: DataClient,
   campaignId: string,
   query: string,
 ): Promise<Tables<'notes'>[]> {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await dataClient
       .from('notes')
       .select('*')
       .eq('campaign_id', campaignId)

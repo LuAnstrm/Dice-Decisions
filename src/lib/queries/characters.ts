@@ -1,18 +1,17 @@
-import { createServerClient } from '@supabase/ssr';
-import type { Tables } from '@/types/database';
+import type { Tables } from '@/types/schema';
 
-type SupabaseClient = ReturnType<typeof createServerClient>;
+type DataClient = any;
 
 /**
  * Get a character by user and campaign.
  */
 export async function getCharacter(
-  supabase: SupabaseClient,
+  dataClient: DataClient,
   userId: string,
   campaignId: string
 ): Promise<Tables<'characters'> | null> {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await dataClient
       .from('characters')
       .select('*')
       .eq('user_id', userId)
@@ -38,11 +37,11 @@ export async function getCharacter(
  * Create a new character.
  */
 export async function createCharacter(
-  supabase: SupabaseClient,
+  dataClient: DataClient,
   data: Record<string, unknown>
 ): Promise<Tables<'characters'> | null> {
   try {
-    const { data: character, error } = await supabase
+    const { data: character, error } = await dataClient
       .from('characters')
       .insert(data as never)
       .select()
@@ -64,12 +63,12 @@ export async function createCharacter(
  * Partial update a character by ID.
  */
 export async function updateCharacter(
-  supabase: SupabaseClient,
+  dataClient: DataClient,
   id: string,
   data: Record<string, unknown>
 ): Promise<Tables<'characters'> | null> {
   try {
-    const { data: character, error } = await supabase
+    const { data: character, error } = await dataClient
       .from('characters')
       .update(data as never)
       .eq('id', id)
@@ -92,11 +91,11 @@ export async function updateCharacter(
  * Hard delete a character by ID.
  */
 export async function deleteCharacter(
-  supabase: SupabaseClient,
+  dataClient: DataClient,
   id: string
 ): Promise<boolean> {
   try {
-    const { error } = await supabase
+    const { error } = await dataClient
       .from('characters')
       .delete()
       .eq('id', id);
@@ -117,11 +116,11 @@ export async function deleteCharacter(
  * Fetch all characters in a campaign.
  */
 export async function getPartyCharacters(
-  supabase: SupabaseClient,
+  dataClient: DataClient,
   campaignId: string
 ): Promise<Tables<'characters'>[]> {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await dataClient
       .from('characters')
       .select('*')
       .eq('campaign_id', campaignId)

@@ -1,6 +1,6 @@
 'use client';
 
-import type { Tables } from '@/types/database';
+import type { Tables } from '@/types/schema';
 import { NpcCard } from '@/components/npcs/npc-card';
 
 interface NpcGridProps {

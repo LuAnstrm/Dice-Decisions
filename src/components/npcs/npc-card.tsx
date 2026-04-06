@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import type { Tables } from '@/types/database';
+import type { Tables } from '@/types/schema';
 import { cn } from '@/lib/utils';
 import { NPC_ROLE_LABELS } from '@/lib/validations/npc';
 import {

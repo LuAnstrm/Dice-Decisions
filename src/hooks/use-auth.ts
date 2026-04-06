@@ -2,34 +2,38 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import { createClient } from '@/lib/supabase/client';
-import type { User } from '@supabase/supabase-js';
-import type { Profile } from '@/types/database';
+import { createClient } from '@/lib/data-client/client';
+import type { Profile } from '@/types/schema';
+
+interface User {
+  id: string;
+  email?: string;
+}
 
 export function useAuth() {
   const router = useRouter();
-  const supabase = createClient();
+  const dataClient = createClient();
   const [user, setUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchProfile = useCallback(
     async (userId: string) => {
-      const { data } = await supabase
+      const { data } = await dataClient
         .from('profiles')
         .select('*')
         .eq('id', userId)
         .single();
       setProfile(data);
     },
-    [supabase],
+    [dataClient],
   );
 
   useEffect(() => {
     const initialize = async () => {
       const {
         data: { user: currentUser },
-      } = await supabase.auth.getUser();
+      } = await dataClient.auth.getUser();
 
       if (currentUser) {
         setUser(currentUser);
@@ -42,7 +46,7 @@ export function useAuth() {
 
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (event, session) => {
+    } = dataClient.auth.onAuthStateChange(async (event, session) => {
       if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
         const sessionUser = session?.user ?? null;
         setUser(sessionUser);
@@ -56,11 +60,11 @@ export function useAuth() {
     });
 
     return () => subscription.unsubscribe();
-  }, [supabase, fetchProfile]);
+  }, [dataClient, fetchProfile]);
 
   const signIn = useCallback(
     async (email: string, password: string): Promise<{ error: string | null }> => {
-      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      const { error } = await dataClient.auth.signInWithPassword({ email, password });
 
       if (error) {
         if (error.message.includes('Invalid login credentials')) {
@@ -75,7 +79,7 @@ export function useAuth() {
       router.refresh();
       return { error: null };
     },
-    [supabase, router],
+    [dataClient, router],
   );
 
   const signUp = useCallback(
@@ -84,7 +88,7 @@ export function useAuth() {
       password: string,
       displayName: string,
     ): Promise<{ error: string | null }> => {
-      const { error } = await supabase.auth.signUp({
+      const { error } = await dataClient.auth.signUp({
         email,
         password,
         options: { data: { display_name: displayName } },
@@ -100,18 +104,18 @@ export function useAuth() {
       router.refresh();
       return { error: null };
     },
-    [supabase, router],
+    [dataClient, router],
   );
 
   const signOut = useCallback(async () => {
-    await supabase.auth.signOut();
+    await dataClient.auth.signOut();
     router.push('/login');
     router.refresh();
-  }, [supabase, router]);
+  }, [dataClient, router]);
 
   const resetPassword = useCallback(
     async (email: string): Promise<{ error: string | null }> => {
-      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      const { error } = await dataClient.auth.resetPasswordForEmail(email, {
         redirectTo: window.location.origin + '/auth/callback',
       });
 
@@ -121,7 +125,7 @@ export function useAuth() {
 
       return { error: null };
     },
-    [supabase],
+    [dataClient],
   );
 
   return {

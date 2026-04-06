@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import type { Tables } from '@/types/database';
+import type { Tables } from '@/types/schema';
 import type { EnemyEntry } from '@/lib/validations/encounter';
 import { Trash2, Plus, Users } from 'lucide-react';
 

@@ -2,14 +2,14 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { createClient } from '@/lib/supabase/client';
+import { createClient } from '@/lib/data-client/client';
 import { Topbar } from '@/components/layout/topbar';
 import { Button } from '@/components/ui/button';
 import { Loader2, Sparkles } from 'lucide-react';
 
 export default function CreateCampaignPage() {
   const router = useRouter();
-  const supabase = createClient();
+  const dataClient = createClient();
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -25,7 +25,7 @@ export default function CreateCampaignPage() {
     try {
       const {
         data: { user },
-      } = await supabase.auth.getUser();
+      } = await dataClient.auth.getUser();
 
       if (!user) {
         setError('You must be logged in to create a campaign.');
@@ -33,7 +33,7 @@ export default function CreateCampaignPage() {
         return;
       }
 
-      const { error: insertError } = await supabase.from('campaigns').insert({
+      const { error: insertError } = await dataClient.from('campaigns').insert({
         name: name.trim(),
         description: description.trim() || null,
         dm_user_id: user.id,

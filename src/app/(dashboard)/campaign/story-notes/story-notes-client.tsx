@@ -2,11 +2,11 @@
 
 import { useState, useCallback, useEffect } from 'react';
 import { ArrowLeft } from 'lucide-react';
-import { createClient } from '@/lib/supabase/client';
+import { createClient } from '@/lib/data-client/client';
 import { updateNote } from '@/lib/queries/notes';
 import { NotesListPanel } from '@/components/notes/notes-list-panel';
 import { NoteEditor } from '@/components/notes/note-editor';
-import type { Tables, Database } from '@/types/database';
+import type { Tables, AppSchema } from '@/types/schema';
 
 interface StoryNotesClientProps {
   initialNotes: Tables<'notes'>[];
@@ -50,9 +50,9 @@ export function StoryNotesClient({
   );
 
   const handleUpdate = useCallback(
-    (id: string, data: Database['public']['Tables']['notes']['Update']) => {
-      const supabase = createClient();
-      updateNote(supabase, id, data).then((updated) => {
+    (id: string, data: AppSchema['public']['Tables']['notes']['Update']) => {
+      const dataClient = createClient();
+      updateNote(dataClient, id, data).then((updated) => {
         if (updated) {
           setNotes((prev) =>
             prev.map((n) => (n.id === updated.id ? updated : n)),

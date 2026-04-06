@@ -1,5 +1,6 @@
-import { createServerClient } from '@supabase/ssr';
-import type { Database, Tables } from '@/types/database';
+import type { Tables } from '@/types/schema';
+
+type DataClient = any;
 
 interface CampaignStats {
   playerCount: number;
@@ -33,12 +34,12 @@ interface RecentNote {
  * First checks if user is a DM, then checks if user has a character in any campaign.
  */
 export async function getActiveCampaign(
-  supabase: ReturnType<typeof createServerClient>,
+  dataClient: DataClient,
   userId: string
 ): Promise<Tables<'campaigns'> | null> {
   try {
     // First, check if user is a DM (exclude templates)
-    const { data: dmCampaigns, error: dmError } = await supabase
+    const { data: dmCampaigns, error: dmError } = await dataClient
       .from('campaigns')
       .select('*')
       .eq('dm_user_id', userId)
@@ -51,7 +52,7 @@ export async function getActiveCampaign(
     }
 
     // If not a DM, check if user has a character in any campaign
-    const { data: characterCampaigns, error: charError } = await supabase
+    const { data: characterCampaigns, error: charError } = await dataClient
       .from('characters')
       .select('campaign_id')
       .eq('user_id', userId)
@@ -63,7 +64,7 @@ export async function getActiveCampaign(
     }
 
     // Get the campaign the character belongs to
-    const { data: campaign, error: campaignError } = await supabase
+    const { data: campaign, error: campaignError } = await dataClient
       .from('campaigns')
       .select('*')
       .eq('id', characterCampaigns[0].campaign_id)
@@ -84,30 +85,30 @@ export async function getActiveCampaign(
  * Get campaign statistics: player count, NPC count, encounter count, and average DC.
  */
 export async function getCampaignStats(
-  supabase: ReturnType<typeof createServerClient>,
+  dataClient: DataClient,
   campaignId: string
 ): Promise<CampaignStats> {
   try {
     // Count active players (distinct users with characters)
-    const { count: playerCount } = await supabase
+    const { count: playerCount } = await dataClient
       .from('characters')
       .select('user_id', { count: 'exact', head: true })
       .eq('campaign_id', campaignId);
 
     // Count NPCs
-    const { count: npcCount } = await supabase
+    const { count: npcCount } = await dataClient
       .from('npcs')
       .select('id', { count: 'exact', head: true })
       .eq('campaign_id', campaignId);
 
     // Count encounters
-    const { count: encounterCount } = await supabase
+    const { count: encounterCount } = await dataClient
       .from('encounters')
       .select('id', { count: 'exact', head: true })
       .eq('campaign_id', campaignId);
 
     // Get average DC
-    const { data: encounters } = await supabase
+    const { data: encounters } = await dataClient
       .from('encounters')
       .select('difficulty_class')
       .eq('campaign_id', campaignId);
@@ -140,11 +141,11 @@ export async function getCampaignStats(
  * Get the next planned encounter in a campaign.
  */
 export async function getNextEncounter(
-  supabase: ReturnType<typeof createServerClient>,
+  dataClient: DataClient,
   campaignId: string
 ): Promise<Tables<'encounters'> | null> {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await dataClient
       .from('encounters')
       .select('*')
       .eq('campaign_id', campaignId)
@@ -164,11 +165,11 @@ export async function getNextEncounter(
  * Get all party members in a campaign with profile information.
  */
 export async function getPartyMembers(
-  supabase: ReturnType<typeof createServerClient>,
+  dataClient: DataClient,
   campaignId: string
 ): Promise<PartyMember[]> {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await dataClient
       .from('characters')
       .select(
         `
@@ -208,12 +209,12 @@ export async function getPartyMembers(
  * Get recent notes in a campaign.
  */
 export async function getRecentNotes(
-  supabase: ReturnType<typeof createServerClient>,
+  dataClient: DataClient,
   campaignId: string,
   limit: number = 3
 ): Promise<RecentNote[]> {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await dataClient
       .from('notes')
       .select(
         `
@@ -252,12 +253,12 @@ export async function getRecentNotes(
  * Get the player's character in a specific campaign.
  */
 export async function getPlayerCharacter(
-  supabase: ReturnType<typeof createServerClient>,
+  dataClient: DataClient,
   userId: string,
   campaignId: string
 ): Promise<Tables<'characters'> | null> {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await dataClient
       .from('characters')
       .select('*')
       .eq('user_id', userId)

@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation';
-import { createClient } from '@/lib/supabase/server';
-import type { Tables } from '@/types/database';
+import { createClient } from '@/lib/data-client/server';
+import type { Tables } from '@/types/schema';
 import { Topbar } from '@/components/layout/topbar';
 import { EmptyState } from '@/components/shared/empty-state';
 import { Swords } from 'lucide-react';
@@ -11,16 +11,16 @@ import { getNPCs } from '@/lib/queries/npcs';
 import { EncountersClient } from './encounters-client';
 
 export default async function EncountersPage() {
-  const supabase = await createClient();
+  const dataClient = await createClient();
   const {
     data: { user },
-  } = await supabase.auth.getUser();
+  } = await dataClient.auth.getUser();
 
   if (!user) {
     redirect('/login');
   }
 
-  const { data: profile } = await supabase
+  const { data: profile } = await dataClient
     .from('profiles')
     .select('preferred_role')
     .eq('id', user.id)
@@ -28,7 +28,7 @@ export default async function EncountersPage() {
 
   const isDM = profile?.preferred_role === 'dm';
 
-  const campaign = await getActiveCampaign(supabase, user.id);
+  const campaign = await getActiveCampaign(dataClient, user.id);
 
   if (!campaign) {
     return (
@@ -46,9 +46,9 @@ export default async function EncountersPage() {
   }
 
   const [encounters, partyCharacters, npcs] = await Promise.all([
-    getEncounters(supabase, campaign.id),
-    getPartyCharacters(supabase, campaign.id),
-    getNPCs(supabase, campaign.id, isDM),
+    getEncounters(dataClient, campaign.id),
+    getPartyCharacters(dataClient, campaign.id),
+    getNPCs(dataClient, campaign.id, isDM),
   ]);
 
   return (

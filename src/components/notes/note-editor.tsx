@@ -7,9 +7,9 @@ import Placeholder from '@tiptap/extension-placeholder';
 import { ScrollText, Lock, Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { TiptapToolbar } from '@/components/notes/tiptap-toolbar';
-import type { Tables, Database } from '@/types/database';
+import type { Tables, AppSchema } from '@/types/schema';
 
-type NoteTag = Database['public']['Enums']['note_tag'];
+type NoteTag = AppSchema['public']['Enums']['note_tag'];
 
 const TAG_DEFAULT = {
   bg: 'bg-(--color-accent-cyan)/20',
@@ -47,7 +47,7 @@ interface NoteEditorProps {
   note: Tables<'notes'> | null;
   onUpdate: (
     id: string,
-    data: Database['public']['Tables']['notes']['Update'],
+    data: AppSchema['public']['Tables']['notes']['Update'],
   ) => void;
 }
 
@@ -66,6 +66,7 @@ export function NoteEditor({ note, onUpdate }: NoteEditorProps) {
   }, []);
 
   const editor = useEditor({
+    immediatelyRender: false,
     extensions: [
       StarterKit,
       Placeholder.configure({

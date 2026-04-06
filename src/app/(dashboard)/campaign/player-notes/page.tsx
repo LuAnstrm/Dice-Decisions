@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation';
-import { createClient } from '@/lib/supabase/server';
+import { createClient } from '@/lib/data-client/server';
 import { Topbar } from '@/components/layout/topbar';
 import { EmptyState } from '@/components/shared/empty-state';
 import { BookOpen } from 'lucide-react';
@@ -8,17 +8,17 @@ import { getPlayerNotes } from '@/lib/queries/campaign';
 import { PlayerNotesClientContent } from './player-notes-client';
 
 export default async function PlayerNotesPage() {
-  const supabase = await createClient();
+  const dataClient = await createClient();
   const {
     data: { user },
-  } = await supabase.auth.getUser();
+  } = await dataClient.auth.getUser();
 
   if (!user) {
     redirect('/login');
   }
 
   // Get active campaign
-  const campaign = await getActiveCampaign(supabase, user.id);
+  const campaign = await getActiveCampaign(dataClient, user.id);
 
   if (!campaign) {
     return (
@@ -36,7 +36,7 @@ export default async function PlayerNotesPage() {
   }
 
   // Get player's notes
-  const notes = await getPlayerNotes(supabase, campaign.id, user.id);
+  const notes = await getPlayerNotes(dataClient, campaign.id, user.id);
 
   return (
     <>

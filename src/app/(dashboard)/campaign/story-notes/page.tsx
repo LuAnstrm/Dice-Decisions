@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation';
-import { createClient } from '@/lib/supabase/server';
-import type { Tables } from '@/types/database';
+import { createClient } from '@/lib/data-client/server';
+import type { Tables } from '@/types/schema';
 import { Topbar } from '@/components/layout/topbar';
 import { EmptyState } from '@/components/shared/empty-state';
 import { ScrollText } from 'lucide-react';
@@ -9,16 +9,16 @@ import { getNotes } from '@/lib/queries/notes';
 import { StoryNotesClient } from './story-notes-client';
 
 export default async function StoryNotesPage() {
-  const supabase = await createClient();
+  const dataClient = await createClient();
   const {
     data: { user },
-  } = await supabase.auth.getUser();
+  } = await dataClient.auth.getUser();
 
   if (!user) {
     redirect('/login');
   }
 
-  const { data: profile } = await supabase
+  const { data: profile } = await dataClient
     .from('profiles')
     .select('preferred_role')
     .eq('id', user.id)
@@ -26,7 +26,7 @@ export default async function StoryNotesPage() {
 
   const isDM = profile?.preferred_role === 'dm';
 
-  const campaign = await getActiveCampaign(supabase, user.id);
+  const campaign = await getActiveCampaign(dataClient, user.id);
 
   if (!campaign) {
     return (
@@ -43,7 +43,7 @@ export default async function StoryNotesPage() {
     );
   }
 
-  const notes = await getNotes(supabase, campaign.id, isDM);
+  const notes = await getNotes(dataClient, campaign.id, isDM);
 
   return (
     <>

@@ -1,4 +1,4 @@
-import type { Tables } from '@/types/database';
+import type { Tables } from '@/types/schema';
 import { Pencil } from 'lucide-react';
 import { cn } from '@/lib/utils';
 

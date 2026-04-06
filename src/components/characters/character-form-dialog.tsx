@@ -3,9 +3,9 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import type { Tables } from '@/types/database';
+import type { Tables } from '@/types/schema';
 import { characterSchema, type CharacterFormData } from '@/lib/validations/character';
-import { createClient } from '@/lib/supabase/client';
+import { createClient } from '@/lib/data-client/client';
 import {
   Dialog,
   DialogContent,
@@ -83,7 +83,7 @@ export function CharacterFormDialog({
   const onSubmit = async (data: CharacterFormData) => {
     setLoading(true);
     try {
-      const supabase = createClient();
+      const dataClient = createClient();
 
       const dbPayload = {
         name: data.name,
@@ -106,16 +106,16 @@ export function CharacterFormDialog({
       };
 
       if (isEdit && character) {
-        const { error } = await supabase
+        const { error } = await dataClient
           .from('characters')
           .update(dbPayload as never)
           .eq('id', character.id);
         if (error) throw error;
       } else {
-        const { data: { user } } = await supabase.auth.getUser();
+        const { data: { user } } = await dataClient.auth.getUser();
         if (!user) throw new Error('Not authenticated');
 
-        const { error } = await supabase
+        const { error } = await dataClient
           .from('characters')
           .insert({ ...dbPayload, user_id: user.id, campaign_id: campaignId } as never);
         if (error) throw error;

@@ -2,8 +2,8 @@
 
 import { useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import type { Tables } from '@/types/database';
-import { createClient } from '@/lib/supabase/client';
+import type { Tables } from '@/types/schema';
+import { createClient } from '@/lib/data-client/client';
 import { createEncounter, updateEncounter } from '@/lib/queries/encounters';
 import {
   encounterSchema,
@@ -71,7 +71,7 @@ export function EncounterForm({
 
   async function onSubmit(data: EncounterFormData) {
     try {
-      const supabase = createClient();
+      const dataClient = createClient();
       const payload = {
         campaign_id: campaignId,
         name: data.name,
@@ -84,9 +84,9 @@ export function EncounterForm({
       let result: Tables<'encounters'> | null;
 
       if (isEditing && encounter) {
-        result = await updateEncounter(supabase, encounter.id, payload);
+        result = await updateEncounter(dataClient, encounter.id, payload);
       } else {
-        result = await createEncounter(supabase, payload);
+        result = await createEncounter(dataClient, payload);
       }
 
       if (result) {

@@ -1,7 +1,7 @@
-import type { Database, Tables } from '@/types/database';
+import type { AppSchema, Tables } from '@/types/schema';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-type SupabaseClient = any;
+type DataClient = any;
 
 export interface EnemyEntry {
   name: string;
@@ -12,12 +12,12 @@ export interface EnemyEntry {
 }
 
 export async function getEncounters(
-  supabase: SupabaseClient,
+  dataClient: DataClient,
   campaignId: string,
-  status?: Database['public']['Enums']['encounter_status'],
+  status?: AppSchema['public']['Enums']['encounter_status'],
 ): Promise<Tables<'encounters'>[]> {
   try {
-    let query = supabase
+    let query = dataClient
       .from('encounters')
       .select('*')
       .eq('campaign_id', campaignId)
@@ -38,11 +38,11 @@ export async function getEncounters(
 }
 
 export async function getEncounter(
-  supabase: SupabaseClient,
+  dataClient: DataClient,
   id: string,
 ): Promise<Tables<'encounters'> | null> {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await dataClient
       .from('encounters')
       .select('*')
       .eq('id', id)
@@ -60,11 +60,11 @@ export async function getEncounter(
 }
 
 export async function createEncounter(
-  supabase: SupabaseClient,
-  data: Database['public']['Tables']['encounters']['Insert'],
+  dataClient: DataClient,
+  data: AppSchema['public']['Tables']['encounters']['Insert'],
 ): Promise<Tables<'encounters'> | null> {
   try {
-    const { data: encounter, error } = await supabase
+    const { data: encounter, error } = await dataClient
       .from('encounters')
       .insert(data)
       .select()
@@ -79,12 +79,12 @@ export async function createEncounter(
 }
 
 export async function updateEncounter(
-  supabase: SupabaseClient,
+  dataClient: DataClient,
   id: string,
-  data: Database['public']['Tables']['encounters']['Update'],
+  data: AppSchema['public']['Tables']['encounters']['Update'],
 ): Promise<Tables<'encounters'> | null> {
   try {
-    const { data: encounter, error } = await supabase
+    const { data: encounter, error } = await dataClient
       .from('encounters')
       .update(data)
       .eq('id', id)
@@ -100,11 +100,11 @@ export async function updateEncounter(
 }
 
 export async function deleteEncounter(
-  supabase: SupabaseClient,
+  dataClient: DataClient,
   id: string,
 ): Promise<boolean> {
   try {
-    const { error } = await supabase
+    const { error } = await dataClient
       .from('encounters')
       .delete()
       .eq('id', id);
@@ -118,12 +118,12 @@ export async function deleteEncounter(
 }
 
 export async function updateEncounterStatus(
-  supabase: SupabaseClient,
+  dataClient: DataClient,
   id: string,
-  status: Database['public']['Enums']['encounter_status'],
+  status: AppSchema['public']['Enums']['encounter_status'],
 ): Promise<Tables<'encounters'> | null> {
   try {
-    const { data: encounter, error } = await supabase
+    const { data: encounter, error } = await dataClient
       .from('encounters')
       .update({ status })
       .eq('id', id)

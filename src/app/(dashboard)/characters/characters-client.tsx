@@ -2,8 +2,8 @@
 
 import { useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import type { Tables } from '@/types/database';
-import { createClient } from '@/lib/supabase/client';
+import type { Tables } from '@/types/schema';
+import { createClient } from '@/lib/data-client/client';
 import { UserCircle } from 'lucide-react';
 import { EmptyState } from '@/components/shared/empty-state';
 import { CharacterHeader } from '@/components/characters/character-header';
@@ -54,8 +54,8 @@ export function CharactersClientContent({
   const handleSaveNotes = useCallback(
     async (notes: string) => {
       if (!selectedCharacter) return;
-      const supabase = createClient();
-      await supabase
+      const dataClient = createClient();
+      await dataClient
         .from('characters')
         .update({ notes } as never)
         .eq('id', selectedCharacter.id);

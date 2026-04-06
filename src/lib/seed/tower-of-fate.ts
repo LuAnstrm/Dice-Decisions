@@ -2,19 +2,19 @@
 // Tower of Fate — Seed Data Definitions
 // =============================================================
 // All data for the pre-built demo campaign (Feature 3.10).
-// Typed to match the Supabase schema defined in database.ts.
+// Typed to match the dataClient schema defined in AppSchema.ts.
 
-import type { Database } from '@/types/database';
+import type { AppSchema } from '@/types/schema';
 import { resolveMapImage } from './sample-images';
 
-type CampaignInsert = Database['public']['Tables']['campaigns']['Insert'];
-type NPCInsert = Database['public']['Tables']['npcs']['Insert'];
-type EncounterInsert = Database['public']['Tables']['encounters']['Insert'];
-type NoteInsert = Database['public']['Tables']['notes']['Insert'];
-type BayesScenarioInsert = Database['public']['Tables']['bayes_scenarios']['Insert'];
-type CampaignMapInsert = Database['public']['Tables']['campaign_maps']['Insert'];
-type MapMarkerInsert = Database['public']['Tables']['map_markers']['Insert'];
-type CharacterInsert = Database['public']['Tables']['characters']['Insert'];
+type CampaignInsert = AppSchema['public']['Tables']['campaigns']['Insert'];
+type NPCInsert = AppSchema['public']['Tables']['npcs']['Insert'];
+type EncounterInsert = AppSchema['public']['Tables']['encounters']['Insert'];
+type NoteInsert = AppSchema['public']['Tables']['notes']['Insert'];
+type BayesScenarioInsert = AppSchema['public']['Tables']['bayes_scenarios']['Insert'];
+type CampaignMapInsert = AppSchema['public']['Tables']['campaign_maps']['Insert'];
+type MapMarkerInsert = AppSchema['public']['Tables']['map_markers']['Insert'];
+type CharacterInsert = AppSchema['public']['Tables']['characters']['Insert'];
 
 // Stable UUIDs for seed data — allows idempotent re-runs
 export const SEED_IDS = {

@@ -39,9 +39,7 @@ export function ProbabilityWorkbench({
   section,
   title,
   description,
-  moduleDescription,
   artPath,
-  stampPath,
   stats = [],
   toolbar,
   className,
@@ -63,7 +61,7 @@ export function ProbabilityWorkbench({
         <div className="absolute -right-10 top-10 h-32 w-32 rounded-full bg-[var(--color-glow)] blur-3xl" />
 
         <div className="relative z-10 p-5 md:p-8">
-          <div className="grid gap-6 xl:grid-cols-[minmax(0,1.25fr)_minmax(320px,0.75fr)] xl:items-start">
+          <div>
             <div>
               <div className="inline-flex items-center gap-2 rounded-full border border-[var(--color-border)] bg-black/20 px-3 py-1 text-[10px] font-mono uppercase tracking-[0.28em] text-[var(--color-text-secondary)]">
                 <span>{section}</span>
@@ -89,50 +87,6 @@ export function ProbabilityWorkbench({
 
               {toolbar && <div className="mt-5">{toolbar}</div>}
             </div>
-
-            <div className="rounded-[24px] border border-[var(--color-border)] bg-black/25 p-5 shadow-[0_16px_40px_rgba(0,0,0,0.3)] backdrop-blur-md">
-              <div className="flex items-center justify-between gap-3">
-                <div>
-                  <p className="text-[10px] font-mono uppercase tracking-[0.24em] text-[var(--color-text-muted)]">
-                    Active Theme
-                  </p>
-                  <p className="mt-1 text-sm font-semibold text-white">{themeConfig.name}</p>
-                </div>
-                <div className="relative h-11 w-11 overflow-hidden rounded-2xl border border-[var(--color-border)] bg-white/5">
-                  <Image src={stampPath} alt="" fill className="object-contain p-2.5 opacity-90" />
-                </div>
-              </div>
-
-              <div className="mt-6 flex items-center gap-4 rounded-[20px] border border-white/8 bg-black/20 p-4">
-                <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-[18px] border border-[var(--color-border)] bg-[var(--color-glow)]/30">
-                  <Image src={artPath} alt="" fill className="object-contain p-3 opacity-95" />
-                </div>
-                <div>
-                  <p className="text-[10px] font-mono uppercase tracking-[0.24em] text-[var(--color-text-muted)]">
-                    Loaded Module
-                  </p>
-                  <p className="mt-1 text-lg font-semibold text-white">{section}</p>
-                  <p className="mt-1 text-sm text-[var(--color-text-secondary)]">
-                    {moduleDescription ?? description}
-                  </p>
-                </div>
-              </div>
-
-              <div className="mt-4 grid grid-cols-2 gap-3 text-xs text-[var(--color-text-secondary)]">
-                <div className="rounded-2xl border border-white/8 bg-black/15 p-3">
-                  <p className="font-mono uppercase tracking-[0.2em] text-[var(--color-text-muted)]">
-                    Backdrop
-                  </p>
-                  <p className="mt-1">{themeConfig.description}</p>
-                </div>
-                <div className="rounded-2xl border border-white/8 bg-black/15 p-3">
-                  <p className="font-mono uppercase tracking-[0.2em] text-[var(--color-text-muted)]">
-                    Accent Vector
-                  </p>
-                  <p className="mt-1">Primary glow follows the active theme token set.</p>
-                </div>
-              </div>
-            </div>
           </div>
 
           {stats.length > 0 && (
@@ -148,9 +102,6 @@ export function ProbabilityWorkbench({
                   <p className={cn('mt-2 text-2xl font-semibold text-white', toneClasses[stat.tone ?? 'accent'])}>
                     {stat.value}
                   </p>
-                  {stat.hint && (
-                    <p className="mt-1 text-xs leading-5 text-[var(--color-text-secondary)]">{stat.hint}</p>
-                  )}
                 </div>
               ))}
             </div>

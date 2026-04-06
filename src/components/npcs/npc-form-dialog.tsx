@@ -2,8 +2,8 @@
 
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import type { Tables } from '@/types/database';
-import { createClient } from '@/lib/supabase/client';
+import type { Tables } from '@/types/schema';
+import { createClient } from '@/lib/data-client/client';
 import { createNPC, updateNPC } from '@/lib/queries/npcs';
 import { npcSchema, NPC_ROLES, NPC_ROLE_LABELS, NPC_STATUSES, type NPCFormData } from '@/lib/validations/npc';
 import {
@@ -76,7 +76,7 @@ export function NpcFormDialog({
   const onSubmit = async (data: NPCFormData) => {
     setSubmitting(true);
     try {
-      const supabase = createClient();
+      const dataClient = createClient();
       const payload = {
         campaign_id: campaignId,
         name: data.name,
@@ -92,9 +92,9 @@ export function NpcFormDialog({
       };
 
       if (isEdit && npc) {
-        await updateNPC(supabase, npc.id, payload);
+        await updateNPC(dataClient, npc.id, payload);
       } else {
-        await createNPC(supabase, payload);
+        await createNPC(dataClient, payload);
       }
 
       reset();

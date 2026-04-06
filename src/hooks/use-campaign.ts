@@ -1,8 +1,8 @@
 'use client';
 
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { createClient } from '@/lib/supabase/client';
-import type { Tables } from '@/types/database';
+import { createClient } from '@/lib/data-client/client';
+import type { Tables } from '@/types/schema';
 
 interface UseCampaignReturn {
   campaign: Tables<'campaigns'> | null;
