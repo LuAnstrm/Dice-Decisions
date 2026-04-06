@@ -24,7 +24,7 @@ export default async function EncountersPage() {
     .from('profiles')
     .select('preferred_role')
     .eq('id', user.id)
-    .single<Tables<'profiles'>>();
+    .single();
 
   const isDM = profile?.preferred_role === 'dm';
 

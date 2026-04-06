@@ -29,7 +29,7 @@ export default async function DashboardPage() {
     .from('profiles')
     .select('preferred_role')
     .eq('id', user.id)
-    .single<Tables<'profiles'>>();
+    .single();
 
   const isDM = profile?.preferred_role === 'dm';
   const campaign = await getActiveCampaign(dataClient, user.id);
